@@ -7,24 +7,55 @@ namespace MyNamespace
     public readonly partial struct UserInput : IAspect
     {
         public readonly RefRO<UserMovement> Movement;
-        public readonly RefRO<UserZoom> Zoom;
+        public readonly RefRO<UserScroll> Scroll;
         public readonly RefRO<UserMouseInfo> MousePosition;
     }
     
     public readonly partial struct UserMouseClickInfo : IAspect
     {
         public readonly RefRO<UserMouseInfo> MousePosition;
-        public readonly RefRO<UserClick> Click;
+        public readonly RefRO<UserSelect> Click;
     }
     
-    public struct UserMovement : IComponentData
+    public interface IUserInputWithValue<T>
     {
-        public float2 Value;
+        public T ValueFunc { get; set; }
+        public bool IsZero()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
-    public struct UserZoom : IComponentData
+    public interface IUserInputValue<T>
     {
-        public sbyte Value;
+        public bool IsNotZero();
+        public T Value { get; set; }
+    }
+
+    public struct UserFloat2InputValue : IUserInputValue<float2>
+    {
+        public bool IsNotZero() => math.any(Value);
+        public float2 Value { get; set; }
+    }
+
+    public struct UserIntInputValue : IUserInputValue<int>
+    {
+        public bool IsNotZero() => Value != 0;
+        public int Value { get; set; }
+    }
+
+    public struct UserMovement : IComponentData, IUserInputWithValue<UserFloat2InputValue>
+    {
+        public float2 Value;
+        public UserFloat2InputValue ValueFunc { get => new() {Value = Value}; set => Value = value.Value; }
+        public static bool IsZero(float2 value) => math.all(value == float2.zero);
+    }
+
+    public struct UserScroll : IComponentData, IUserInputWithValue<UserIntInputValue>
+    {
+        public int Value;
+        public UserIntInputValue ValueFunc { get => new() {Value = Value}; set => Value = value.Value; }
+        public static bool IsZero(int value) => value == 0;
     }
     
     public struct UserMouseInfo : IComponentData
@@ -33,7 +64,12 @@ namespace MyNamespace
         public Ray Ray;
     }
 
-    public struct UserClick : IComponentData
+    public struct UserSelect : IComponentData
     {
     }
+
+    public struct UserDrag : IComponentData
+    {
+    }
+    
 }

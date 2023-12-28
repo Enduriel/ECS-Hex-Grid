@@ -38,15 +38,15 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": ""Zoom"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""bcdd4d21-f899-4cc4-9fac-f064da73dbb4"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Click"",
+                    ""name"": ""Select"",
                     ""type"": ""Button"",
                     ""id"": ""7c1599be-236f-49c1-b210-d3a06338891e"",
                     ""expectedControlType"": ""Button"",
@@ -55,13 +55,13 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""New action"",
-                    ""type"": ""Value"",
+                    ""name"": ""Drag"",
+                    ""type"": ""Button"",
                     ""id"": ""43bda05c-483e-4f05-94e6-06ca12b59c28"",
-                    ""expectedControlType"": ""Touch"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -121,57 +121,35 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""2b564db0-50af-4fc5-9e61-d86baf0ca8c5"",
-                    ""path"": ""1DAxis(minValue=-5,maxValue=5)"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""a8886121-1310-4118-b7e5-14faa678937c"",
-                    ""path"": ""<Mouse>/scroll/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""39d6fec5-60ac-4f14-985a-70e9e2a932f2"",
-                    ""path"": ""<Mouse>/scroll/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Zoom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""556410ff-ae83-4a3d-b0e6-16041fc9b797"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Click"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""17170168-e82e-42d3-ae1f-23c0acf1d88a"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Drag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cef7515e-b7c7-4392-b182-f67128369f7e"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -184,8 +162,8 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
         m_DefaultMap = asset.FindActionMap("Default Map", throwIfNotFound: true);
         m_DefaultMap_Movement = m_DefaultMap.FindAction("Movement", throwIfNotFound: true);
         m_DefaultMap_Zoom = m_DefaultMap.FindAction("Zoom", throwIfNotFound: true);
-        m_DefaultMap_Click = m_DefaultMap.FindAction("Click", throwIfNotFound: true);
-        m_DefaultMap_Newaction = m_DefaultMap.FindAction("New action", throwIfNotFound: true);
+        m_DefaultMap_Select = m_DefaultMap.FindAction("Select", throwIfNotFound: true);
+        m_DefaultMap_Drag = m_DefaultMap.FindAction("Drag", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,16 +227,16 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
     private List<IDefaultMapActions> m_DefaultMapActionsCallbackInterfaces = new List<IDefaultMapActions>();
     private readonly InputAction m_DefaultMap_Movement;
     private readonly InputAction m_DefaultMap_Zoom;
-    private readonly InputAction m_DefaultMap_Click;
-    private readonly InputAction m_DefaultMap_Newaction;
+    private readonly InputAction m_DefaultMap_Select;
+    private readonly InputAction m_DefaultMap_Drag;
     public struct DefaultMapActions
     {
         private @DefaultMovementActions m_Wrapper;
         public DefaultMapActions(@DefaultMovementActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_DefaultMap_Movement;
         public InputAction @Zoom => m_Wrapper.m_DefaultMap_Zoom;
-        public InputAction @Click => m_Wrapper.m_DefaultMap_Click;
-        public InputAction @Newaction => m_Wrapper.m_DefaultMap_Newaction;
+        public InputAction @Select => m_Wrapper.m_DefaultMap_Select;
+        public InputAction @Drag => m_Wrapper.m_DefaultMap_Drag;
         public InputActionMap Get() { return m_Wrapper.m_DefaultMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -274,12 +252,12 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
-            @Click.started += instance.OnClick;
-            @Click.performed += instance.OnClick;
-            @Click.canceled += instance.OnClick;
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
+            @Drag.started += instance.OnDrag;
+            @Drag.performed += instance.OnDrag;
+            @Drag.canceled += instance.OnDrag;
         }
 
         private void UnregisterCallbacks(IDefaultMapActions instance)
@@ -290,12 +268,12 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
-            @Click.started -= instance.OnClick;
-            @Click.performed -= instance.OnClick;
-            @Click.canceled -= instance.OnClick;
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
+            @Drag.started -= instance.OnDrag;
+            @Drag.performed -= instance.OnDrag;
+            @Drag.canceled -= instance.OnDrag;
         }
 
         public void RemoveCallbacks(IDefaultMapActions instance)
@@ -317,7 +295,7 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
-        void OnClick(InputAction.CallbackContext context);
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnSelect(InputAction.CallbackContext context);
+        void OnDrag(InputAction.CallbackContext context);
     }
 }

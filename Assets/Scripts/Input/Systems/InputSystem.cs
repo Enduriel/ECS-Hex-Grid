@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using MyNamespace.Input.Enums;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -14,28 +17,31 @@ namespace MyNamespace
         private DefaultMovementActions _movementActions;
         private Entity _playerEntity;
 
-        private bool _clicked;
-        private bool _lastClicked;
+        private Dictionary<InputType, bool> _lastFrameInput = new Dictionary<InputType, bool>()
+        {
+            {InputType.Select, false},
+            {InputType.Drag, false},
+            {InputType.Scroll, false},
+            {InputType.Move, false}
+        };
+        
+        // private Dictionary<InputType, Func<>>
         
         protected override void OnCreate()
         {
             _movementActions = new DefaultMovementActions();
-            var ecb = new EntityCommandBuffer();
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
             var singleton = ecb.CreateEntity();
+            ecb.SetName(singleton, new FixedString64Bytes("UserInputSingleton"));
             ecb.AddComponent<UserMouseInfo>(singleton);
             ecb.SetComponent(singleton, new UserMouseInfo());
-            ecb.AddComponent<UserMovement>(singleton);
-            ecb.SetComponent(singleton, new UserMovement());
-            ecb.AddComponent<UserZoom>(singleton);
-            ecb.AddComponent(singleton, new UserZoom());
             ecb.Playback(EntityManager);
-            _playerEntity = SystemAPI.GetSingletonEntity<UserInput>();
+            _playerEntity = SystemAPI.GetSingletonEntity<UserMouseInfo>();
         }
         // Start is called before the first frame update
         protected override void OnStartRunning()
         {
             _movementActions.Enable();
-            _movementActions.DefaultMap.Click.performed += _ => _clicked = true;
         }
 
         protected override void OnUpdate()
@@ -46,7 +52,8 @@ namespace MyNamespace
             // or at least easily cast?
             // who tf knows
             var managedRay = Camera.main!.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, 0));
-            EntityManager.SetComponentData(_playerEntity, new UserMouseInfo
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            ecb.SetComponent(_playerEntity, new UserMouseInfo
             {
                 Position = mousePos,
                 Ray = new Ray
@@ -55,24 +62,58 @@ namespace MyNamespace
                     Displacement = managedRay.direction
                 }
             });
-            EntityManager.SetComponentData(_playerEntity, new UserZoom()
-            {
-                Value = _movementActions.DefaultMap.Zoom.ReadValue<sbyte>()
-            });
-            EntityManager.SetComponentData(_playerEntity, new UserMovement()
+
+            UpdateComponentWithValue<UserMovement, UserFloat2InputValue, float2>(ecb, InputType.Move, new UserFloat2InputValue
             {
                 Value = _movementActions.DefaultMap.Movement.ReadValue<Vector2>()
             });
-            if (_clicked)
+            UpdateComponentWithValue<UserScroll, UserIntInputValue, int>(ecb, InputType.Scroll, new UserIntInputValue
             {
-                EntityManager.AddComponent<UserClick>(_playerEntity);
-                _clicked = false;
-                _lastClicked = true;
+                Value = (int)Mouse.current.scroll.ReadValue().normalized.y
+            });
+            UpdateComponent<UserSelect>(ecb, InputType.Select, Mouse.current.leftButton.ReadValue());
+            UpdateComponent<UserDrag>(ecb, InputType.Drag, Mouse.current.middleButton.ReadValue());
+            ecb.Playback(EntityManager);
+            ecb.Dispose();
+        }
+        
+        private void UpdateComponent<T>(EntityCommandBuffer ecb, InputType inputType, float value) where T : unmanaged, IComponentData
+        {
+            if (value != 0)
+            {
+                if (!_lastFrameInput[inputType])
+                {
+                    ecb.AddComponent<T>(_playerEntity);
+                    _lastFrameInput[inputType] = true;
+                }
             }
-            else if (_lastClicked)
+            else if (_lastFrameInput[inputType])
             {
-                EntityManager.RemoveComponent<UserClick>(_playerEntity);
-                _lastClicked = false;
+                ecb.RemoveComponent<T>(_playerEntity);
+                _lastFrameInput[inputType] = false;
+            }
+        }
+
+        private void UpdateComponentWithValue<T, T1, T2>(EntityCommandBuffer ecb, InputType inputType, T1 value)
+            where T : unmanaged, IComponentData, IUserInputWithValue<T1>
+            where T1 : IUserInputValue<T2>
+        {
+            if (value.IsNotZero())
+            {
+                if (!_lastFrameInput[inputType])
+                {
+                    ecb.AddComponent<T>(_playerEntity);
+                    _lastFrameInput[inputType] = true;
+                }
+                ecb.SetComponent(_playerEntity, new T
+                {
+                    ValueFunc = value
+                });
+            }
+            else if (_lastFrameInput[inputType])
+            {
+                ecb.RemoveComponent<T>(_playerEntity);
+                _lastFrameInput[inputType] = false;
             }
         }
 
