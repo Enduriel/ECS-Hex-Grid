@@ -48,14 +48,12 @@ namespace MyNamespace
     {
         public float2 Value;
         public UserFloat2InputValue ValueFunc { get => new() {Value = Value}; set => Value = value.Value; }
-        public static bool IsZero(float2 value) => math.all(value == float2.zero);
     }
 
     public struct UserScroll : IComponentData, IUserInputWithValue<UserIntInputValue>
     {
         public int Value;
         public UserIntInputValue ValueFunc { get => new() {Value = Value}; set => Value = value.Value; }
-        public static bool IsZero(int value) => value == 0;
     }
     
     public struct UserMouseInfo : IComponentData
