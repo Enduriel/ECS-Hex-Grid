@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using MyNamespace.Jobs;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
@@ -26,19 +29,15 @@ namespace MyNamespace
 
         public void OnUpdate(ref SystemState state)
         {
-            // can be partially done in OnCreate
-             var ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
             // this must complete before the BeginSimulationEntityCommandBufferSystem
             // is run
-            var meshDataArray = Mesh.AllocateWritableMeshData(_hexGridQuery.CalculateEntityCount());
-            var e = ecb.CreateEntity();
-            ecb.AddComponent(e, new MeshDataComponent(meshDataArray));
+            var ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
+
             new InitHexHexGridJob
             {
-                CommandBuffer = ecb.AsParallelWriter(),
-                MeshDataArray = meshDataArray
-            }.ScheduleParallel(_hexGridQuery);
+                ECB = ecb
+            }.ScheduleParallel();
         }
     }
 }

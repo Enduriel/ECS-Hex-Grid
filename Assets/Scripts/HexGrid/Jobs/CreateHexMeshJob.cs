@@ -1,6 +1,6 @@
-﻿using Unity.Collections;
+﻿using Components;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Rendering;
 using UnityEngine;
@@ -8,57 +8,39 @@ using UnityEngine.Rendering;
 
 namespace MyNamespace.Jobs
 {
-    public partial struct InitHexHexGridJob : IJobEntity
+    public partial struct CreateHexMeshJob : IJobEntity
     {
-
-        // Output
-        public EntityCommandBuffer.ParallelWriter CommandBuffer;
+        public EntityCommandBuffer.ParallelWriter ECB;
         public Mesh.MeshDataArray MeshDataArray;
+        public MeshDataArrayID MeshDataArrayID;
 
-        public void Execute([ChunkIndexInQuery] int chunkIdx,[EntityIndexInQuery] int idx, Entity e, ref RenderBounds renderBounds, in HexHexGridData hexGridData)
+        public void Execute(
+            [ChunkIndexInQuery] int chunkIdx,
+            [EntityIndexInQuery] int idx,
+            ref RenderBounds renderBounds,
+            in DynamicBuffer<HexBuffer> hexes,
+            in HexHexGridData hexHexGridData,
+            Entity e)
         {
-            CommandBuffer.AddBuffer<HexBuffer>(chunkIdx, e);
-            var hexes = CommandBuffer.SetBuffer<HexBuffer>(chunkIdx, e);
-            // CommandBuffer.RemoveComponent<RenderMeshArray>(chunkIdx, e);
-            InitHexGrid(hexes, hexGridData);
-            CreateMesh(hexes, hexGridData, ref renderBounds, idx);
+            CreateMesh(hexes, hexHexGridData, ref renderBounds, idx);
+            ECB.AddComponent(chunkIdx, e, new MeshDataArrayComponent
+            {
+                ID = MeshDataArrayID,
+                Index = idx
+            });
+            ECB.RemoveComponent<MeshOutdatedTag>(chunkIdx, e);
         }
         
-        private HexBuffer CreateHex(HexCoordinates coords)
-        {
-            return new HexBuffer(coords);
-        }
-
-        private void InitHexGrid(DynamicBuffer<HexBuffer> hexes, HexHexGridData hexGridData)
-        {
-            hexes.ResizeUninitialized(HexHelpers.GetNumHexes(hexGridData.Radius));
-            var direction = HexCoordinates.NE;
-            var currentCoords = new HexCoordinates(0, 0);
-            var idx = 0;
-            hexes[idx++] = CreateHex(currentCoords);
-            for (int i = 0; i < hexGridData.Radius; i++)
-            {
-                // each edge within cycle
-                for (int j = 0; j < 6; j++)
-                {
-                    // each hex within edge
-                    direction = HexHelpers.DirectionMap[direction];
-                    for (int k = 0; k < i; k++)
-                    {
-                        currentCoords += direction;
-                        hexes[idx++] = CreateHex(currentCoords);
-                    }
-                }
-                currentCoords += HexCoordinates.N;
-            }
-        }
-
-        private void CreateMesh(DynamicBuffer<HexBuffer> hexes, HexHexGridData hexHexGridData, ref RenderBounds renderBounds, int idx)
+        private void CreateMesh(
+            DynamicBuffer<HexBuffer> hexes,
+            HexHexGridData hexHexGridData,
+            ref RenderBounds renderBounds,
+            int meshDataArrayIndex)
         {
             int vertexAttributeCount = 2;
             var vertexCount = hexes.Length * 18;
             var triangleIndexCount = vertexCount;
-            var meshData = MeshDataArray[idx];
+            var meshData = MeshDataArray[meshDataArrayIndex];
             var vertexAttributes = new NativeArray<VertexAttributeDescriptor>(
                 vertexAttributeCount, Allocator.Temp, NativeArrayOptions.UninitializedMemory
             );
@@ -104,16 +86,15 @@ namespace MyNamespace.Jobs
             }, MeshUpdateFlags.DontRecalculateBounds);
 
             renderBounds.Value = aabb;
-            
-             //       vertexAttributes[1] = new VertexAttributeDescriptor(
-			   //  VertexAttribute.Normal, dimension: 3, stream: 1
-		    // );
-		    // vertexAttributes[2] = new VertexAttributeDescriptor(
-			   //  VertexAttribute.Tangent, dimension: 4, stream: 2
-		    // );
-		    // vertexAttributes[3] = new VertexAttributeDescriptor(
-			   //  VertexAttribute.TexCoord0, dimension: 2, stream: 3
-		    // );
+            //       vertexAttributes[1] = new VertexAttributeDescriptor(
+            //  VertexAttribute.Normal, dimension: 3, stream: 1
+            // );
+            // vertexAttributes[2] = new VertexAttributeDescriptor(
+            //  VertexAttribute.Tangent, dimension: 4, stream: 2
+            // );
+            // vertexAttributes[3] = new VertexAttributeDescriptor(
+            //  VertexAttribute.TexCoord0, dimension: 2, stream: 3
+            // );
         }
         
         private void AddTriangle(NativeArray<float3> vertices, NativeArray<ushort> triangles, NativeArray<float3> normals, int idx, float3 v1, float3 v2, float3 v3)
