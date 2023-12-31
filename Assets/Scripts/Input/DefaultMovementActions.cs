@@ -62,6 +62,15 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseMovement"",
+                    ""type"": ""Value"",
+                    ""id"": ""3f963bad-1835-4206-9270-658ce692a01f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad9fdca3-805e-4c5f-bae0-27649d7242b6"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
         m_DefaultMap_Zoom = m_DefaultMap.FindAction("Zoom", throwIfNotFound: true);
         m_DefaultMap_Select = m_DefaultMap.FindAction("Select", throwIfNotFound: true);
         m_DefaultMap_Drag = m_DefaultMap.FindAction("Drag", throwIfNotFound: true);
+        m_DefaultMap_MouseMovement = m_DefaultMap.FindAction("MouseMovement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,6 +250,7 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
     private readonly InputAction m_DefaultMap_Zoom;
     private readonly InputAction m_DefaultMap_Select;
     private readonly InputAction m_DefaultMap_Drag;
+    private readonly InputAction m_DefaultMap_MouseMovement;
     public struct DefaultMapActions
     {
         private @DefaultMovementActions m_Wrapper;
@@ -237,6 +259,7 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
         public InputAction @Zoom => m_Wrapper.m_DefaultMap_Zoom;
         public InputAction @Select => m_Wrapper.m_DefaultMap_Select;
         public InputAction @Drag => m_Wrapper.m_DefaultMap_Drag;
+        public InputAction @MouseMovement => m_Wrapper.m_DefaultMap_MouseMovement;
         public InputActionMap Get() { return m_Wrapper.m_DefaultMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +281,9 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
             @Drag.started += instance.OnDrag;
             @Drag.performed += instance.OnDrag;
             @Drag.canceled += instance.OnDrag;
+            @MouseMovement.started += instance.OnMouseMovement;
+            @MouseMovement.performed += instance.OnMouseMovement;
+            @MouseMovement.canceled += instance.OnMouseMovement;
         }
 
         private void UnregisterCallbacks(IDefaultMapActions instance)
@@ -274,6 +300,9 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
             @Drag.started -= instance.OnDrag;
             @Drag.performed -= instance.OnDrag;
             @Drag.canceled -= instance.OnDrag;
+            @MouseMovement.started -= instance.OnMouseMovement;
+            @MouseMovement.performed -= instance.OnMouseMovement;
+            @MouseMovement.canceled -= instance.OnMouseMovement;
         }
 
         public void RemoveCallbacks(IDefaultMapActions instance)
@@ -297,5 +326,6 @@ public partial class @DefaultMovementActions: IInputActionCollection2, IDisposab
         void OnZoom(InputAction.CallbackContext context);
         void OnSelect(InputAction.CallbackContext context);
         void OnDrag(InputAction.CallbackContext context);
+        void OnMouseMovement(InputAction.CallbackContext context);
     }
 }

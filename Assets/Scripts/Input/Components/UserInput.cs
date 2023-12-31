@@ -1,25 +1,14 @@
-﻿using Unity.Entities;
+﻿using System;
+using MyNamespace.Input.Enums;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
 namespace MyNamespace
 {
-    public readonly partial struct UserInput : IAspect
-    {
-        public readonly RefRO<UserMovement> Movement;
-        public readonly RefRO<UserScroll> Scroll;
-        public readonly RefRO<UserMouseInfo> MousePosition;
-    }
-    
-    public readonly partial struct UserMouseClickInfo : IAspect
-    {
-        public readonly RefRO<UserMouseInfo> MousePosition;
-        public readonly RefRO<UserSelect> Click;
-    }
-    
     public interface IUserInputWithValue<T>
     {
-        public T ValueFunc { get; set; }
+        public T SetValue { set; }
         public bool IsZero()
         {
             throw new System.NotImplementedException();
@@ -30,6 +19,11 @@ namespace MyNamespace
     {
         public bool IsNotZero();
         public T Value { get; set; }
+    }
+
+    public interface IUserInput
+    {
+        public ButtonState SetState { set; }
     }
 
     public struct UserFloat2InputValue : IUserInputValue<float2>
@@ -47,13 +41,19 @@ namespace MyNamespace
     public struct UserMovement : IComponentData, IUserInputWithValue<UserFloat2InputValue>
     {
         public float2 Value;
-        public UserFloat2InputValue ValueFunc { get => new() {Value = Value}; set => Value = value.Value; }
+        public UserFloat2InputValue SetValue { set => Value = value.Value; }
+    }
+    
+    public struct UserMouseMovement : IComponentData, IUserInputWithValue<UserFloat2InputValue>
+    {
+        public float2 Value;
+        public UserFloat2InputValue SetValue { set => Value = value.Value; }
     }
 
     public struct UserScroll : IComponentData, IUserInputWithValue<UserIntInputValue>
     {
         public int Value;
-        public UserIntInputValue ValueFunc { get => new() {Value = Value}; set => Value = value.Value; }
+        public UserIntInputValue SetValue { set => Value = value.Value; }
     }
     
     public struct UserMouseInfo : IComponentData
@@ -62,12 +62,16 @@ namespace MyNamespace
         public Ray Ray;
     }
 
-    public struct UserSelect : IComponentData
+    public struct UserSelect : IComponentData, IUserInput
     {
+        public ButtonState State;
+        public ButtonState SetState { set => State = value; }
     }
 
-    public struct UserDrag : IComponentData
+    public struct UserDrag : IComponentData, IUserInput
     {
+        public ButtonState State;
+        public ButtonState SetState { set => State = value; }
     }
     
 }

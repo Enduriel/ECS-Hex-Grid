@@ -1,10 +1,11 @@
 ﻿namespace MyNamespace.Input.Enums
 {
-    public enum InputType
+    public enum InputType : byte
     {
         Select,
         Drag,
         Scroll,
-        Move
+        Move,
+        MouseMove
     }
 }

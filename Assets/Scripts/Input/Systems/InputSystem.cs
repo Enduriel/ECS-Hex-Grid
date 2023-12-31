@@ -7,22 +7,29 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using Ray = Unity.Physics.Ray;
 
 namespace MyNamespace
 {
-    [UpdateInGroup(typeof(InitializationSystemGroup))]
+    [UpdateInGroup(typeof(InitializationSystemGroup), OrderFirst = true)]
+    [UpdateBefore(typeof(BeginInitializationEntityCommandBufferSystem))]
     public partial class InputSystem : SystemBase
     {
         private DefaultMovementActions _movementActions;
         private Entity _playerEntity;
 
-        private Dictionary<InputType, bool> _lastFrameInput = new Dictionary<InputType, bool>()
+        private NativeHashMap<int, ButtonState> _lastFrameState = new(2, Allocator.Persistent)
         {
-            {InputType.Select, false},
-            {InputType.Drag, false},
-            {InputType.Scroll, false},
-            {InputType.Move, false}
+            {(int)InputType.Select, ButtonState.None},
+            {(int)InputType.Drag, ButtonState.None}
+        };
+
+        private NativeHashMap<int, bool> _lastFrameInput = new (2, Allocator.Persistent)
+        {
+            {(int)InputType.Scroll, false},
+            {(int)InputType.Move, false},
+            {(int)InputType.MouseMove, false}
         };
         
         // private Dictionary<InputType, Func<>>
@@ -35,6 +42,7 @@ namespace MyNamespace
             ecb.SetName(singleton, new FixedString64Bytes("UserInputSingleton"));
             ecb.AddComponent<UserMouseInfo>(singleton);
             ecb.SetComponent(singleton, new UserMouseInfo());
+            
             ecb.Playback(EntityManager);
             _playerEntity = SystemAPI.GetSingletonEntity<UserMouseInfo>();
         }
@@ -52,7 +60,10 @@ namespace MyNamespace
             // or at least easily cast?
             // who tf knows
             var managedRay = Camera.main!.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, 0));
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            // todo verify that this actually needs to happen immediately,
+            // pretty sure there's a way it doesn't which would be cleaner
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
             ecb.SetComponent(_playerEntity, new UserMouseInfo
             {
                 Position = mousePos,
@@ -71,26 +82,43 @@ namespace MyNamespace
             {
                 Value = (int)Mouse.current.scroll.ReadValue().normalized.y
             });
-            UpdateComponent<UserSelect>(ecb, InputType.Select, Mouse.current.leftButton.ReadValue());
-            UpdateComponent<UserDrag>(ecb, InputType.Drag, Mouse.current.middleButton.ReadValue());
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
+            UpdateComponentWithValue<UserMouseMovement, UserFloat2InputValue, float2>(ecb, InputType.MouseMove, new UserFloat2InputValue
+            {
+                Value = _movementActions.DefaultMap.MouseMovement.ReadValue<Vector2>()
+            });
+            
+            UpdateComponent<UserSelect>(ecb, InputType.Select, Mouse.current.leftButton);
+            UpdateComponent<UserDrag>(ecb, InputType.Drag, Mouse.current.middleButton);
         }
         
-        private void UpdateComponent<T>(EntityCommandBuffer ecb, InputType inputType, float value) where T : unmanaged, IComponentData
+        private void UpdateComponent<T>(EntityCommandBuffer ecb, InputType inputType, ButtonControl button)
+            where T : unmanaged, IComponentData, IUserInput
         {
-            if (value != 0)
+            var value = ButtonState.None;
+            if (button.isPressed)
             {
-                if (!_lastFrameInput[inputType])
-                {
-                    ecb.AddComponent<T>(_playerEntity);
-                    _lastFrameInput[inputType] = true;
-                }
+                if ((_lastFrameState[(int)inputType] & ButtonState.PressedOrHeld) == ButtonState.None)
+                    value = ButtonState.Pressed;
+                else
+                    value = ButtonState.Held;
             }
-            else if (_lastFrameInput[inputType])
+            else if ((_lastFrameState[(int)inputType] & ButtonState.PressedOrHeld) != ButtonState.None)
+            {
+                value = ButtonState.Released;
+            }
+            
+            _lastFrameState[(int)inputType] = value;
+            if (value == ButtonState.None)
             {
                 ecb.RemoveComponent<T>(_playerEntity);
-                _lastFrameInput[inputType] = false;
+            }
+            else
+            {
+                ecb.AddComponent<T>(_playerEntity);
+                ecb.SetComponent(_playerEntity, new T
+                {
+                    SetState = value
+                });
             }
         }
 
@@ -100,26 +128,33 @@ namespace MyNamespace
         {
             if (value.IsNotZero())
             {
-                if (!_lastFrameInput[inputType])
+                if (!_lastFrameInput[(int)inputType])
                 {
                     ecb.AddComponent<T>(_playerEntity);
-                    _lastFrameInput[inputType] = true;
+                    _lastFrameInput[(int)inputType] = true;
                 }
                 ecb.SetComponent(_playerEntity, new T
                 {
-                    ValueFunc = value
+                    SetValue = value
                 });
             }
-            else if (_lastFrameInput[inputType])
+            else if (_lastFrameInput[(int)inputType])
             {
                 ecb.RemoveComponent<T>(_playerEntity);
-                _lastFrameInput[inputType] = false;
+                _lastFrameInput[(int)inputType] = false;
             }
         }
 
         protected override void OnStopRunning()
         {
             _movementActions.Disable();
+        }
+
+        protected override void OnDestroy()
+        {
+            _lastFrameState.Dispose();
+            _lastFrameInput.Dispose();
+            base.OnDestroy();
         }
     }
 }
