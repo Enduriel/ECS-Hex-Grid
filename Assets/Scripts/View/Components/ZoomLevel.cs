@@ -2,8 +2,8 @@
 
 namespace View.Components
 {
-    public struct ZoomLevel : IComponentData
-    {
-        public int Value;
-    }
+	public struct ZoomLevel : IComponentData
+	{
+		public int Value;
+	}
 }

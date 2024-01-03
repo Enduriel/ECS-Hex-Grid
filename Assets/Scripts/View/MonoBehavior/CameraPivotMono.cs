@@ -2,7 +2,7 @@
 
 namespace View
 {
-    public class CameraPivotMono : EntityFollower<CameraPivotTag>
-    {
-    }
+	public class CameraPivotMono : EntityFollower<CameraPivotTag>
+	{
+	}
 }

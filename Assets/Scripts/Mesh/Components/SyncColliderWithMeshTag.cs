@@ -2,8 +2,7 @@
 
 namespace Mesh.Components
 {
-    public struct SyncColliderWithMeshTag : IComponentData
-    {
-        
-    }
+	public struct SyncColliderWithMeshTag : IComponentData
+	{
+	}
 }

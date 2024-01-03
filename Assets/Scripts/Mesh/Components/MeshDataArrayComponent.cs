@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace MyNamespace
 {
-    public struct MeshDataArrayComponent : IComponentData
-    {
-        public MeshDataArrayID ID;
-        public int Index;
-    }
+	public struct MeshDataArrayComponent : IComponentData
+	{
+		public MeshDataArrayID ID;
+		public int Index;
+	}
 }

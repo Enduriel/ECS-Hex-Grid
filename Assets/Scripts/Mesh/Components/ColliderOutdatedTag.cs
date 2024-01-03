@@ -2,8 +2,7 @@
 
 namespace Mesh.Components
 {
-    public struct ColliderOutdatedTag : IComponentData
-    {
-        
-    }
+	public struct ColliderOutdatedTag : IComponentData
+	{
+	}
 }

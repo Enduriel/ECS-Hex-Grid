@@ -2,8 +2,7 @@
 
 namespace View.Components
 {
-    public struct CameraTag : IComponentData
-    {
-        
-    }
+	public struct CameraTag : IComponentData
+	{
+	}
 }

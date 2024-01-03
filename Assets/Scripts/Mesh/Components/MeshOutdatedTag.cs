@@ -2,7 +2,7 @@
 
 namespace Components
 {
-    public struct MeshOutdatedTag : IComponentData
-    {
-    }
+	public struct MeshOutdatedTag : IComponentData
+	{
+	}
 }
