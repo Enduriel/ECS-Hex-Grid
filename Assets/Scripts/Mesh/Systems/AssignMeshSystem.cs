@@ -76,7 +76,7 @@ namespace MyNamespace
                     }
                     else
                     {
-                        Debug.Fail($"MeshDataArrayID {meshDataArrayID} is invalid");
+                        Debug.LogError($"MeshDataArrayID {meshDataArrayID} is invalid");
                     }
                 }
                 var mesh = new UnityEngine.Mesh();
