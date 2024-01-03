@@ -1,16 +1,5 @@
 {
   "dependencies": {
-    "com.bovinelabs.core": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.burst": "1.8.8",
-        "com.unity.entities": "1.0.16",
-        "com.unity.logging": "1.0.11"
-      },
-      "url": "https://package.openupm.com"
-    },
     "com.unity.burst": {
       "version": "1.8.11",
       "depth": 1,
@@ -106,16 +95,6 @@
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.logging": {
-      "version": "1.0.11",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.burst": "1.8.4",
-        "com.unity.collections": "2.1.4"
       },
       "url": "https://packages.unity.com"
     },
