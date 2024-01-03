@@ -34,19 +34,19 @@ namespace Trideria.HexGrid
 
 		public static int GetDistance(HexCoordinates a, HexCoordinates b)
 		{
-			return (math.abs(a.q - b.q)
-			        + math.abs(a.q + a.r - b.q - b.r)
-			        + math.abs(a.r - b.r)) / 2;
+			return (math.abs(a.Q - b.Q)
+			        + math.abs(a.Q + a.R - b.Q - b.R)
+			        + math.abs(a.R - b.R)) / 2;
 		}
 
 		public static readonly NativeHashMap<HexCoordinates, HexCoordinates> DirectionMap = new(6, Allocator.Persistent)
 		{
-			{ HexCoordinates.N, HexCoordinates.NE },
-			{ HexCoordinates.NE, HexCoordinates.SE },
-			{ HexCoordinates.SE, HexCoordinates.S },
-			{ HexCoordinates.S, HexCoordinates.SW },
-			{ HexCoordinates.SW, HexCoordinates.NW },
-			{ HexCoordinates.NW, HexCoordinates.N }
+			{ HexCoordinates.North, HexCoordinates.NorthEast },
+			{ HexCoordinates.NorthEast, HexCoordinates.SouthEast },
+			{ HexCoordinates.SouthEast, HexCoordinates.South },
+			{ HexCoordinates.South, HexCoordinates.SouthWest },
+			{ HexCoordinates.SouthWest, HexCoordinates.NorthWest },
+			{ HexCoordinates.NorthWest, HexCoordinates.North }
 		};
 
 		public static int GetNumHexes(int radius)
@@ -57,9 +57,9 @@ namespace Trideria.HexGrid
 		public static float3 GetRelativePosition(HexCoordinates origin, HexCoordinates target, int elevation = 0)
 		{
 			return new float3(
-				(target.q - origin.q) * OuterRadius * 1.5f,
+				(target.Q - origin.Q) * OuterRadius * 1.5f,
 				elevation * Height,
-				(target.q - origin.q) * InnerRadius + (target.r - origin.r) * InnerRadius * 2
+				(target.Q - origin.Q) * InnerRadius + (target.R - origin.R) * InnerRadius * 2
 			);
 		}
 

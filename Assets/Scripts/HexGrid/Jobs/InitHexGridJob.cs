@@ -60,7 +60,7 @@ namespace Trideria.HexGrid
 		private void InitHexGrid(DynamicBuffer<HexBuffer> hexes, HexHexGridData hexGridData)
 		{
 			hexes.ResizeUninitialized(HexHelpers.GetNumHexes(hexGridData.Radius));
-			var direction = HexCoordinates.NE;
+			var direction = HexCoordinates.NorthEast;
 			var currentCoords = new HexCoordinates(0, 0);
 			var idx = 0;
 			hexes[idx++] = CreateHex(currentCoords);
@@ -78,7 +78,7 @@ namespace Trideria.HexGrid
 					}
 				}
 
-				currentCoords += HexCoordinates.N;
+				currentCoords += HexCoordinates.North;
 			}
 		}
 	}
