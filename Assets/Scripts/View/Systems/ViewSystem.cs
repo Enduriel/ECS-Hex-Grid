@@ -119,5 +119,11 @@ namespace Trideria.View
 			state.Dependency = handle;
 			test = handle;
 		}
+
+		public void OnDestroy(ref SystemState state)
+		{
+			_requireForUpdateQuery.Dispose();
+			_onUpdateQuery.Dispose();
+		}
 	}
 }

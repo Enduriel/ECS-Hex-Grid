@@ -32,5 +32,10 @@ namespace Trideria.HexGrid
 				ECB = ecb
 			}.ScheduleParallel();
 		}
+		
+		public void OnDestroy(ref SystemState state)
+		{
+			_hexGridQuery.Dispose();
+		}
 	}
 }

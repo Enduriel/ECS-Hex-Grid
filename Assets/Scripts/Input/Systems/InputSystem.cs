@@ -10,14 +10,14 @@ namespace Trideria.Input
 	[UpdateBefore(typeof(BeginInitializationEntityCommandBufferSystem))]
 	public partial class InputSystem : SystemBase
 	{
-		private readonly NativeHashMap<int, bool> _lastFrameInput = new(2, Allocator.Persistent)
+		private NativeHashMap<int, bool> _lastFrameInput = new(2, Allocator.Persistent)
 		{
 			{ (int)InputType.Scroll, false },
 			{ (int)InputType.Move, false },
 			{ (int)InputType.MouseMove, false }
 		};
 
-		private readonly NativeHashMap<int, ButtonState> _lastFrameState = new(2, Allocator.Persistent)
+		private NativeHashMap<int, ButtonState> _lastFrameState = new(2, Allocator.Persistent)
 		{
 			{ (int)InputType.Select, ButtonState.None },
 			{ (int)InputType.Drag, ButtonState.None }
@@ -63,6 +63,18 @@ namespace Trideria.Input
 				SelectPressed = _movementActions.DefaultMap.Select.IsPressed(),
 				DragPressed = _movementActions.DefaultMap.Drag.IsPressed()
 			}.Schedule();
+		}
+
+		protected override void OnStopRunning()
+		{
+			_movementActions.Enable();
+		}
+
+		protected override void OnDestroy()
+		{
+			_movementActions.Dispose();
+			_lastFrameState.Dispose();
+			_lastFrameInput.Dispose();
 		}
 	}
 }

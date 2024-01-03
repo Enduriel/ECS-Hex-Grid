@@ -62,5 +62,10 @@ namespace Trideria.HexGrid
 				ecb.AddComponent<MeshOutdatedTag>(hit.Entity);
 			}
 		}
+
+		public void OnDestroy(ref SystemState state)
+		{
+			_hexGridQuery.Dispose();
+		}
 	}
 }
