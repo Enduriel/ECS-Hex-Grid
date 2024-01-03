@@ -16,7 +16,7 @@ namespace MyNamespace
         {
             state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
             _entityQuery = SystemAPI.QueryBuilder()
-                .WithAll<HexBuffer, MaterialMeshInfo, MeshOutdatedTag>()
+                .WithAll<HexBuffer, MaterialMeshInfo, MeshOutdatedTag, RenderBounds, HexHexGridData>()
                 .WithNone<MeshDataArrayComponent>()
                 .Build();
             state.RequireForUpdate(_entityQuery);
@@ -27,21 +27,12 @@ namespace MyNamespace
             var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
             var id = state.World.GetExistingSystemManaged<AssignMeshSystem>().AllocateMeshDataArray(out var meshDataArray, _entityQuery.CalculateEntityCount());
-
             new CreateHexMeshJob()
             {
                 ECB = ecb.AsParallelWriter(),
                 MeshDataArrayID = id,
                 MeshDataArray = meshDataArray
-            }.ScheduleParallel();
-
-            // var ecb2 = SystemAPI.GetSingleton<BeginPresentationEntityCommandBufferSystem.Singleton>()
-            //     .CreateCommandBuffer(state.WorldUnmanaged);
-            // new CreateHexMeshJob()
-            // {
-            //     CommandBuffer = ecb2.AsParallelWriter()
-            // }.ScheduleParallel(SystemAPI.QueryBuilder().WithAll<UpdateHexMeshTag>().Build(), ecb.);
-
+            }.ScheduleParallel(_entityQuery);
         }
     }
 }
