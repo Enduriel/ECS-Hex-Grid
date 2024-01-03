@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace MyNamespace.Jobs
@@ -39,7 +40,7 @@ namespace MyNamespace.Jobs
             ref RenderBounds renderBounds,
             int meshDataArrayIndex)
         {
-            int vertexAttributeCount = 2;
+            int vertexAttributeCount = 3;
             var vertexCount = hexes.Length * 18;
             var triangleIndexCount = vertexCount;
             var meshData = MeshDataArray[meshDataArrayIndex];
@@ -50,9 +51,14 @@ namespace MyNamespace.Jobs
             vertexAttributes[1] = new VertexAttributeDescriptor(
 			    VertexAttribute.Normal, dimension: 3, stream: 1
 		    );
+            vertexAttributes[2] = new VertexAttributeDescriptor(
+                VertexAttribute.Color, dimension: 4, stream: 2
+            );
+            
             meshData.SetVertexBufferParams(vertexCount, vertexAttributes);
             var vertices = meshData.GetVertexData<float3>();
             var normals = meshData.GetVertexData <float3>(1);
+            var colors = meshData.GetVertexData<Color>(2);
             
             meshData.SetIndexBufferParams(triangleIndexCount, IndexFormat.UInt16);
             var triangles = meshData.GetIndexData<ushort>();
@@ -68,10 +74,12 @@ namespace MyNamespace.Jobs
                         vertices,
                         triangles,
                         normals,
+                        colors,
                         j + i * 3,
                         hexOrigin,
                         hexOrigin + HexHelpers.Vertices[i],
-                        hexOrigin + HexHelpers.Vertices[i + 1]);
+                        hexOrigin + HexHelpers.Vertices[i + 1],
+                        hexBufferElement.Value.Color);
                 }
 
                 j += 18;
@@ -94,11 +102,12 @@ namespace MyNamespace.Jobs
             NativeArray<float3> vertices, 
             NativeArray<ushort> triangles, 
             NativeArray<float3> normals, 
-            
+            NativeArray<Color> colors,
             int idx, 
             float3 v1, 
             float3 v2, 
-            float3 v3)
+            float3 v3,
+            Color color)
         {
             vertices[idx] = v1;
             vertices[idx + 1] = v2;
@@ -107,6 +116,7 @@ namespace MyNamespace.Jobs
             triangles[idx] = (ushort) idx;
             triangles[idx + 1] = (ushort) (idx + 1);
             triangles[idx + 2] = (ushort) (idx + 2);
+            colors[idx] = colors[idx + 1] = colors[idx + 2] = color;
         }
     }
 }
