@@ -83,6 +83,8 @@ namespace MyNamespace
                 meshDataArrayToMeshMap[meshDataArrayID].Item2[meshDataArrayComponent.ValueRO.Index] = mesh;
                 materialMeshInfo.ValueRW.MeshID = system.RegisterMesh(mesh);
                 ecb.RemoveComponent<MeshDataArrayComponent>(entity);
+                if (SystemAPI.HasComponent<SyncColliderWithMeshTag>(entity))
+                    ecb.AddComponent<ColliderOutdatedTag>(entity);
             }
             
             foreach (var (_, (meshDataArray, meshes)) in meshDataArrayToMeshMap)
