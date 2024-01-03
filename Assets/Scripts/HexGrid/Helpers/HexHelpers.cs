@@ -12,6 +12,7 @@ namespace MyNamespace
     {
         public const float OuterRadius = 1f;
         public const float InnerRadius = OuterRadius * 0.866025404f;
+        public const float Height = 0.5f;
         
 	    public static readonly float3[] Vertices = {
 		    new float3(-OuterRadius * 0.5f, 0f, InnerRadius),
@@ -73,23 +74,23 @@ namespace MyNamespace
 		    return new float3(diag, 0f, diag);
 	    }
 
-	    public static float3 GetLocalPosition(HexCoordinates coords)
+	    public static float3 GetLocalPosition(HexCoordinates coords, int elevation = 0)
 	    {
-		    return GetRelativePosition(HexCoordinates.Zero, coords);
+		    return GetRelativePosition(HexCoordinates.Zero, coords, elevation);
 	    }
 
-	    public static float3 GetWorldPosition(HexCoordinates coords, float3 hexGridPos)
+	    public static float3 GetWorldPosition(HexCoordinates coords, LocalTransform hexGridTransform, int elevation = 0)
 	    {
-		    return GetLocalPosition(coords) + hexGridPos;
+		    return math.mul(hexGridTransform.Rotation, GetLocalPosition(coords, elevation)) + hexGridTransform.Position;
 	    }
 
-	    public static int GetHexIdxAtPosition(DynamicBuffer<HexBuffer> buffer, float3 hexGridPosition, float3 position)
+	    public static int GetHexIdxAtPosition(DynamicBuffer<HexBuffer> buffer, LocalTransform hexGridTransform, float3 position)
 	    {
 		    var minDistance = float.PositiveInfinity;
 		    var minIdx = 0;
 		    for (int i = 0; i < buffer.Length; i++)
 		    {
-			    var distance = math.distance(GetWorldPosition(buffer[i].Value.Coords, hexGridPosition), position);
+			    var distance = math.distance(GetWorldPosition(buffer[i].Value.Coords, hexGridTransform, buffer[i].Value.Height), position);
 			    if (minDistance > distance)
 			    {
 				    minDistance = distance;
