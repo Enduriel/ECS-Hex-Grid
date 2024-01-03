@@ -1,10 +1,8 @@
-﻿using System;
-using MyNamespace.Input.Enums;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
-namespace MyNamespace
+namespace Trideria.Input
 {
 	public interface IUserInputWithValue<T>
 	{

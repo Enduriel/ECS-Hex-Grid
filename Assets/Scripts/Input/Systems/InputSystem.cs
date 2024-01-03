@@ -1,19 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Input.Jobs;
-using MyNamespace.Input.Enums;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
-using View.Aspects;
 using Ray = Unity.Physics.Ray;
 
-namespace MyNamespace
+namespace Trideria.Input
 {
 	[UpdateInGroup(typeof(InitializationSystemGroup), OrderFirst = true)]
 	[UpdateBefore(typeof(BeginInitializationEntityCommandBufferSystem))]

@@ -1,4 +1,4 @@
-﻿namespace MyNamespace.Input.Enums
+﻿namespace Trideria.Input
 {
 	public enum InputType : byte
 	{

@@ -1,8 +1,7 @@
 ﻿using System;
 using Unity.Entities;
-using UnityEditor.AnimatedValues;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	public struct HexCoordinates : IComponentData, IEquatable<HexCoordinates>
 	{

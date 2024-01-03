@@ -1,12 +1,10 @@
-﻿using System;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using View.Systems;
 
-namespace View.Components
+namespace Trideria.View
 {
 	public abstract class EntityFollower<T> : MonoBehaviour
 		where T : IComponentData

@@ -1,9 +1,7 @@
 ﻿using Unity.Entities;
-using Unity.Entities.Serialization;
-using Unity.Rendering;
 using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	public struct HexHexGridPrefabComponent : IComponentData
 	{

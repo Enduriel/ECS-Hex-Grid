@@ -1,14 +1,10 @@
-﻿using MyNamespace;
-using MyNamespace.Input.Enums;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using UnityEngine.Rendering;
 
-namespace Input.Jobs
+namespace Trideria.Input
 {
 	[BurstCompile]
 	public partial struct InputUpdateJob : IJobEntity

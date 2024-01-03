@@ -1,15 +1,12 @@
-﻿using MyNamespace;
+﻿using Trideria.Input;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using View.Aspects;
-using View.Components;
-using View.Jobs;
 using Parent = Unity.Transforms.Parent;
 
-namespace View.Systems
+namespace Trideria.View
 {
 	// todo fix frame of input lag
 	[UpdateInGroup(typeof(InitializationSystemGroup))]

@@ -1,14 +1,10 @@
-﻿using MyNamespace;
-using MyNamespace.Input.Enums;
+﻿using Trideria.Input;
 using Unity.Burst;
 using Unity.Collections;
-using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using View.Aspects;
-using View.Components;
 
-namespace View.Jobs
+namespace Trideria.View
 {
 	[BurstCompile]
 	public struct UpdateZoomLevelJob : IJob

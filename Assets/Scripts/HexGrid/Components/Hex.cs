@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	public struct Hex
 	{

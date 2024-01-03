@@ -1,7 +1,6 @@
 ﻿using Unity.Entities;
-using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.Mesh
 {
 	public struct MeshDataArrayComponent : IComponentData
 	{

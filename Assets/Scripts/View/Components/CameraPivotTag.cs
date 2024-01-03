@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace View.Components
+namespace Trideria.View
 {
 	public struct CameraPivotTag : IComponentData
 	{

@@ -1,10 +1,8 @@
-﻿using Components;
-using MyNamespace.Jobs;
+﻿using Trideria.Mesh;
 using Unity.Entities;
 using Unity.Rendering;
-using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	[UpdateInGroup(typeof(SimulationSystemGroup))]
 	[UpdateAfter(typeof(BeginSimulationEntityCommandBufferSystem))]

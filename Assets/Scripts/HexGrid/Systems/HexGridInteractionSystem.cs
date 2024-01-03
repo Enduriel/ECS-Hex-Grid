@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using Components;
-using MyNamespace.Input.Enums;
+﻿using Trideria.Input;
+using Trideria.Mesh;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -8,7 +7,7 @@ using Unity.Transforms;
 using UnityEngine;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	[UpdateInGroup(typeof(SimulationSystemGroup))]
 	[UpdateBefore(typeof(BeginSimulationEntityCommandBufferSystem))]

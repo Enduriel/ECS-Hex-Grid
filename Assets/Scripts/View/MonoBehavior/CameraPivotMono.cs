@@ -1,6 +1,4 @@
-﻿using View.Components;
-
-namespace View
+﻿namespace Trideria.View
 {
 	public class CameraPivotMono : EntityFollower<CameraPivotTag>
 	{

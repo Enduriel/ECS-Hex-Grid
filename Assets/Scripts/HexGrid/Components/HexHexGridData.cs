@@ -1,10 +1,9 @@
 ﻿using Unity.Entities;
-using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
-    public struct HexHexGridData : IComponentData
-    {
-        public ushort Radius;
-    }
+	public struct HexHexGridData : IComponentData
+	{
+		public ushort Radius;
+	}
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyNamespace.Input.Enums
+namespace Trideria.Input
 {
 	[Flags]
 	public enum ButtonState

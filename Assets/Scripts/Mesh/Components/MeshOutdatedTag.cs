@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Components
+namespace Trideria.Mesh
 {
 	public struct MeshOutdatedTag : IComponentData
 	{

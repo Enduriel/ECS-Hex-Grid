@@ -3,10 +3,8 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using View.Aspects;
-using View.Components;
 
-namespace View.Jobs
+namespace Trideria.View
 {
 	public partial struct UpdateCameraJob : IJobEntity
 	{

@@ -1,8 +1,7 @@
-﻿using MyNamespace;
+﻿using Trideria.Input;
 using Unity.Entities;
-using View.Components;
 
-namespace View.Aspects
+namespace Trideria.View
 {
 	public readonly partial struct ViewSystemInputAspect : IAspect
 	{

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using Mesh.Components;
-using Mesh.Jobs;
 using Unity.Entities;
 using Unity.Rendering;
 
-namespace MyNamespace
+namespace Trideria.Mesh
 {
 	[UpdateInGroup(typeof(InitializationSystemGroup))]
 	[UpdateBefore(typeof(EndInitializationEntityCommandBufferSystem))]

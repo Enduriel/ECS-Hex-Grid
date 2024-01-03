@@ -1,15 +1,13 @@
-﻿using Mesh.Components;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering;
 using MeshCollider = Unity.Physics.MeshCollider;
 
-namespace Mesh.Jobs
+namespace Trideria.Mesh
 {
 	[BurstCompile]
 	public partial struct SyncColliderWithMeshJob : IJobEntity

@@ -1,8 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Transforms;
 
-namespace View.Components
+namespace Trideria.View
 {
 	[InternalBufferCapacity(10)]
 	public partial struct ZoomLevelDescriptorElement : IBufferElementData

@@ -1,8 +1,7 @@
 ﻿using Unity.Entities;
-using Unity.Rendering;
 using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	public class HexHexGridMono : MonoBehaviour
 	{

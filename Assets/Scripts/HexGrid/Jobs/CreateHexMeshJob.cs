@@ -1,4 +1,4 @@
-﻿using Components;
+﻿using Trideria.Mesh;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,7 +7,7 @@ using Unity.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace MyNamespace.Jobs
+namespace Trideria.HexGrid
 {
 	[BurstCompile]
 	public partial struct CreateHexMeshJob : IJobEntity

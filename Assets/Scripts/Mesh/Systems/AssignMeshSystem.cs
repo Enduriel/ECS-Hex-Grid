@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using Mesh.Components;
 using Unity.Entities;
 using Unity.Rendering;
 using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.Mesh
 {
 	public struct MeshDataArrayID
 	{

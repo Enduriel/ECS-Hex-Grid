@@ -1,15 +1,7 @@
-﻿using System;
-using System.Linq;
-using MyNamespace.Jobs;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.Entities;
-using Unity.Jobs;
+﻿using Unity.Entities;
 using Unity.Rendering;
-using Unity.Transforms;
-using UnityEngine;
 
-namespace MyNamespace
+namespace Trideria.HexGrid
 {
 	[UpdateInGroup(typeof(InitializationSystemGroup))]
 	[UpdateBefore(typeof(EndInitializationEntityCommandBufferSystem))]
