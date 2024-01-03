@@ -20,7 +20,7 @@ namespace MyNamespace
     {
         private EntityQuery _hexGridQuery;
         
-        private List<Mesh.MeshDataArray?> _meshDataArrays;
+        private List<UnityEngine.Mesh.MeshDataArray?> _meshDataArrays;
 
         protected override void OnCreate()
         {
@@ -31,12 +31,12 @@ namespace MyNamespace
                 .Build();
             RequireForUpdate(_hexGridQuery);
             
-            _meshDataArrays = new List<Mesh.MeshDataArray?>();
+            _meshDataArrays = new List<UnityEngine.Mesh.MeshDataArray?>();
         }
         
-        public MeshDataArrayID AllocateMeshDataArray(out Mesh.MeshDataArray meshDataArray, int size)
+        public MeshDataArrayID AllocateMeshDataArray(out UnityEngine.Mesh.MeshDataArray meshDataArray, int size)
         {
-            meshDataArray = Mesh.AllocateWritableMeshData(size);
+            meshDataArray = UnityEngine.Mesh.AllocateWritableMeshData(size);
             var idx = _meshDataArrays.FindIndex(x => x == null);
             if (idx == -1)
             {
@@ -50,7 +50,7 @@ namespace MyNamespace
             return new MeshDataArrayID { Value = idx };
         }
         
-        private Mesh.MeshDataArray? UseMeshDataArray(MeshDataArrayID id)
+        private UnityEngine.Mesh.MeshDataArray? UseMeshDataArray(MeshDataArrayID id)
         {
             var value = _meshDataArrays[id.Value];
             _meshDataArrays[id.Value] = null;
@@ -63,7 +63,7 @@ namespace MyNamespace
                 .CreateCommandBuffer(World.Unmanaged);
             var system = World.GetExistingSystemManaged<EntitiesGraphicsSystem>();
             
-            var meshDataArrayToMeshMap = new Dictionary<MeshDataArrayID, (Mesh.MeshDataArray, Mesh[])>();
+            var meshDataArrayToMeshMap = new Dictionary<MeshDataArrayID, (UnityEngine.Mesh.MeshDataArray, UnityEngine.Mesh[])>();
             foreach (var (materialMeshInfo, meshDataArrayComponent, entity)
                      in SystemAPI.Query<RefRW<MaterialMeshInfo>, RefRO<MeshDataArrayComponent>>().WithEntityAccess())
             {
@@ -72,14 +72,14 @@ namespace MyNamespace
                 {
                     if (UseMeshDataArray(meshDataArrayID) is { } meshDataArray)
                     {
-                        meshDataArrayToMeshMap[meshDataArrayID] = (meshDataArray, new Mesh[meshDataArray.Length]);
+                        meshDataArrayToMeshMap[meshDataArrayID] = (meshDataArray, new UnityEngine.Mesh[meshDataArray.Length]);
                     }
                     else
                     {
                         Debug.Fail($"MeshDataArrayID {meshDataArrayID} is invalid");
                     }
                 }
-                var mesh = new Mesh();
+                var mesh = new UnityEngine.Mesh();
                 meshDataArrayToMeshMap[meshDataArrayID].Item2[meshDataArrayComponent.ValueRO.Index] = mesh;
                 materialMeshInfo.ValueRW.MeshID = system.RegisterMesh(mesh);
                 ecb.RemoveComponent<MeshDataArrayComponent>(entity);
@@ -87,7 +87,7 @@ namespace MyNamespace
             
             foreach (var (key, (meshDataArray, meshes)) in meshDataArrayToMeshMap)
             {
-                Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, meshes);
+                UnityEngine.Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, meshes);
             }
         }
     }

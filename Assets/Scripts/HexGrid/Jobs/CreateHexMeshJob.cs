@@ -13,7 +13,7 @@ namespace MyNamespace.Jobs
     public partial struct CreateHexMeshJob : IJobEntity
     {
         public EntityCommandBuffer.ParallelWriter ECB;
-        public Mesh.MeshDataArray MeshDataArray;
+        public UnityEngine.Mesh.MeshDataArray MeshDataArray;
         public MeshDataArrayID MeshDataArrayID;
 
         [BurstCompile]
