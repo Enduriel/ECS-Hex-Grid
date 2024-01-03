@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using UnityEngine;
 
 namespace MyNamespace
 {
@@ -6,7 +7,7 @@ namespace MyNamespace
     {
         public HexCoordinates Coords;
         public int Height;
-        public HexTerrain Terrain;
+        public Color Color;
     }
     
     public enum HexTerrainEnum
@@ -41,12 +42,12 @@ namespace MyNamespace
             Value = new Hex { Coords = coords };
         }
         
-        public HexBuffer(HexCoordinates coords, HexTerrainEnum terrain)
+        public HexBuffer(HexCoordinates coords, Color color)
         {
             Value = new Hex
             {
                 Coords = coords,
-                Terrain = terrain
+                Color = color
             };
         }
     }
