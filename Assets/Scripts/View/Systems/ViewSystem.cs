@@ -11,6 +11,7 @@ namespace Trideria.View
 	// todo fix frame of input lag
 	[UpdateInGroup(typeof(InitializationSystemGroup))]
 	[UpdateBefore(typeof(EndInitializationEntityCommandBufferSystem))]
+	[CreateAfter(typeof(InputSystem))]
 	public partial struct ViewSystem : ISystem
 	{
 		public static float ZoomSpeed = 1f;
