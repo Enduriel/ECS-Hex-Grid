@@ -85,7 +85,7 @@ namespace MyNamespace
                 ecb.RemoveComponent<MeshDataArrayComponent>(entity);
             }
             
-            foreach (var (key, (meshDataArray, meshes)) in meshDataArrayToMeshMap)
+            foreach (var (_, (meshDataArray, meshes)) in meshDataArrayToMeshMap)
             {
                 UnityEngine.Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, meshes);
             }
