@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
@@ -71,8 +73,30 @@ namespace MyNamespace
 		    return new float3(diag, 0f, diag);
 	    }
 
+	    public static float3 GetLocalPosition(HexCoordinates coords)
 	    {
+		    return GetRelativePosition(HexCoordinates.Zero, coords);
 	    }
 
+	    public static float3 GetWorldPosition(HexCoordinates coords, float3 hexGridPos)
+	    {
+		    return GetLocalPosition(coords) + hexGridPos;
+	    }
+
+	    public static int GetHexIdxAtPosition(DynamicBuffer<HexBuffer> buffer, float3 hexGridPosition, float3 position)
+	    {
+		    var minDistance = float.PositiveInfinity;
+		    var minIdx = 0;
+		    for (int i = 0; i < buffer.Length; i++)
+		    {
+			    var distance = math.distance(GetWorldPosition(buffer[i].Value.Coords, hexGridPosition), position);
+			    if (minDistance > distance)
+			    {
+				    minDistance = distance;
+				    minIdx = i;
+			    }
+		    }
+		    return minIdx;
+	    }
     }
 }
