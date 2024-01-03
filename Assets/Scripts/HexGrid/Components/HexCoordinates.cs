@@ -25,6 +25,8 @@ namespace MyNamespace
             };
         }
 
+        public static readonly HexCoordinates Zero = new();
+
         public static readonly HexCoordinates N = new() { q = 0, r = -1 };
 
         public static readonly HexCoordinates NE = new() { q = 1, r = -1 };
