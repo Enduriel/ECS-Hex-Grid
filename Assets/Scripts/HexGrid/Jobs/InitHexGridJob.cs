@@ -31,7 +31,8 @@ namespace MyNamespace.Jobs
             var hexes = ECB.SetBuffer<HexBuffer>(chunkIdx, e);
             // CommandBuffer.RemoveComponent<RenderMeshArray>(chunkIdx, e);
             InitHexGrid(hexes, hexGridData);
-            ECB.AddComponent(chunkIdx, e, new MeshOutdatedTag());
+            ECB.AddComponent<MeshOutdatedTag>(chunkIdx, e);
+            ECB.AddComponent<SyncColliderWithMeshTag>(chunkIdx, e);
         }
 
         private HexBuffer CreateHex(HexCoordinates coords)
