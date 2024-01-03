@@ -53,27 +53,12 @@ namespace MyNamespace
             return 1 + 3 * radius * (radius - 1);
         }
 
-	    public static Vector3 GetRelativePositionVec(HexCoordinates origin, HexCoordinates target)
-	    {
-		    // todo optimize
-		    return new Vector3(
-			    (target.q - origin.q) * OuterRadius * 1.5f,
-			    0f,
-			    (target.q - origin.q) * OuterRadius * Mathf.Sqrt(3f)/2f + (target.r - origin.r) * OuterRadius * Mathf.Sqrt(3f)
-		    );
-		    return new Vector3(
-			    (target.q - origin.q) * OuterRadius * 1.5f,
-			    0f,
-			    (target.r - origin.r) * InnerRadius * 2f + ((target.q - origin.q) & 1) * InnerRadius
-		    );
-	    }
-	    
-	    public static float3 GetRelativePositionFloat3(HexCoordinates origin, HexCoordinates target)
+	    public static float3 GetRelativePosition(HexCoordinates origin, HexCoordinates target, int elevation = 0)
 	    {
 		    return new float3(
 			    (target.q - origin.q) * OuterRadius * 1.5f,
-			    0f,
-			    (target.q - origin.q) * OuterRadius * Mathf.Sqrt(3f)/2f + (target.r - origin.r) * OuterRadius * Mathf.Sqrt(3f)
+			    elevation * Height,
+			    (target.q - origin.q) * InnerRadius + (target.r - origin.r) * InnerRadius * 2
 		    );
 	    }
 
@@ -86,13 +71,7 @@ namespace MyNamespace
 		    return new float3(diag, 0f, diag);
 	    }
 
-	    public static LocalTransform GetRelativePosition(HexCoordinates origin, HexCoordinates target)
 	    {
-		    // todo optimize
-		    return new LocalTransform()
-		    {
-				Position = GetRelativePositionVec(origin, target)
-		    };
 	    }
 
     }

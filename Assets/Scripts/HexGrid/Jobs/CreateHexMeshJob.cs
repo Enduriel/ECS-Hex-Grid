@@ -59,7 +59,7 @@ namespace MyNamespace.Jobs
             var j = 0;
             foreach (var hexBufferElement in hexes)
             {
-                var hexOrigin = HexHelpers.GetRelativePositionFloat3(baseCoords, hexBufferElement.Value.Coords);
+                var hexOrigin = HexHelpers.GetRelativePosition(baseCoords, hexBufferElement.Value.Coords, hexBufferElement.Value.Height);
                 for (int i = 0; i < 6; i++)
                 {
                     AddTriangle(
