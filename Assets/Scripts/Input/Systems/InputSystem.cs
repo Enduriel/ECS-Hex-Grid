@@ -10,20 +10,20 @@ namespace Trideria.Input
 	[UpdateBefore(typeof(BeginInitializationEntityCommandBufferSystem))]
 	public partial class InputSystem : SystemBase
 	{
-		private DefaultMovementActions _movementActions;
-
-		private NativeHashMap<int, ButtonState> _lastFrameState = new(2, Allocator.Persistent)
-		{
-			{ (int)InputType.Select, ButtonState.None },
-			{ (int)InputType.Drag, ButtonState.None }
-		};
-
-		private NativeHashMap<int, bool> _lastFrameInput = new(2, Allocator.Persistent)
+		private readonly NativeHashMap<int, bool> _lastFrameInput = new(2, Allocator.Persistent)
 		{
 			{ (int)InputType.Scroll, false },
 			{ (int)InputType.Move, false },
 			{ (int)InputType.MouseMove, false }
 		};
+
+		private readonly NativeHashMap<int, ButtonState> _lastFrameState = new(2, Allocator.Persistent)
+		{
+			{ (int)InputType.Select, ButtonState.None },
+			{ (int)InputType.Drag, ButtonState.None }
+		};
+
+		private DefaultMovementActions _movementActions;
 
 		// private Dictionary<InputType, Func<>>
 

@@ -33,7 +33,7 @@ namespace Trideria.Mesh
 			}
 
 			var meshDataArray = UnityEngine.Mesh.AcquireReadOnlyMeshData(meshList);
-			new SyncColliderWithMeshJob()
+			new SyncColliderWithMeshJob
 			{
 				ECB = ecb.AsParallelWriter(),
 				MeshDataArray = meshDataArray

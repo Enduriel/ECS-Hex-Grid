@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
-using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Trideria.HexGrid
 {
@@ -28,12 +27,15 @@ namespace Trideria.HexGrid
 		{
 			var userSelect = _hexGridQuery.GetSingleton<UserSelect>();
 			if (userSelect.State != ButtonState.Pressed)
+			{
 				return;
+			}
+
 			var userMouseInfo = _hexGridQuery.GetSingleton<UserMouseInfo>();
 			var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
 			Debug.DrawLine(userMouseInfo.Ray.Origin, userMouseInfo.Ray.Origin + userMouseInfo.Ray.Displacement * 1000,
 				Color.red, 100f);
-			RaycastInput test = new RaycastInput()
+			var test = new RaycastInput
 			{
 				Start = userMouseInfo.Ray.Origin,
 				End = userMouseInfo.Ray.Origin + userMouseInfo.Ray.Displacement * 1000,
@@ -41,7 +43,7 @@ namespace Trideria.HexGrid
 			};
 
 
-			if (collisionWorld.CastRay(test, out RaycastHit hit))
+			if (collisionWorld.CastRay(test, out var hit))
 			{
 				Debug.DrawLine(hit.Position, hit.Position + hit.SurfaceNormal * 1, Color.green, 100f);
 				var buffer = SystemAPI.GetBuffer<HexBuffer>(hit.Entity);

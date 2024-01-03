@@ -6,6 +6,7 @@ using Unity.Transforms;
 
 namespace Trideria.View
 {
+	[BurstCompile]
 	public partial struct UpdateCameraJob : IJobEntity
 	{
 		[ReadOnly] public NativeReference<ViewSystemInputAspect> ConfigAspect;

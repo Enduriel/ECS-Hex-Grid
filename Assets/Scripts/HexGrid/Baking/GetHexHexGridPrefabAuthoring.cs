@@ -19,7 +19,7 @@ namespace Trideria.HexGrid
 		{
 			var entityPrefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic);
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
-			AddComponent(entity, new HexHexGridPrefabComponent() { Value = entityPrefab });
+			AddComponent(entity, new HexHexGridPrefabComponent { Value = entityPrefab });
 		}
 	}
 }

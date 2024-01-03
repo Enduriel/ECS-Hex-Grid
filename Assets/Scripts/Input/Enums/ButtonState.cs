@@ -9,6 +9,6 @@ namespace Trideria.Input
 		Pressed = 0b001,
 		Held = 0b010,
 		PressedOrHeld = Pressed | Held,
-		Released = 0b100,
+		Released = 0b100
 	}
 }

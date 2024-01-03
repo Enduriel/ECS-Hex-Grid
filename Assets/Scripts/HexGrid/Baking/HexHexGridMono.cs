@@ -16,7 +16,7 @@ namespace Trideria.HexGrid
 			var hexGridEntity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(hexGridEntity, new HexHexGridData
 			{
-				Radius = authoring.radius,
+				Radius = authoring.radius
 			});
 		}
 	}

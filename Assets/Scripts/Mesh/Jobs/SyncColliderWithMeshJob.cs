@@ -25,13 +25,13 @@ namespace Trideria.Mesh
 			var meshData = MeshDataArray[idx];
 			if (meshData.indexFormat == IndexFormat.UInt32)
 			{
-				Debug.LogError($"Mesh index format is UInt32, but only UInt16 is supported");
+				Debug.LogError("Mesh index format is UInt32, but only UInt16 is supported");
 				return;
 			}
 
 			var indexData = meshData.GetIndexData<ushort>();
 			var triangleData = new NativeArray<int3>(indexData.Length / 3, Allocator.Temp);
-			for (int i = 0; i < indexData.Length; i += 3)
+			for (var i = 0; i < indexData.Length; i += 3)
 			{
 				triangleData[i / 3] = new int3(indexData[i], indexData[i + 1], indexData[i + 2]);
 			}

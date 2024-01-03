@@ -15,7 +15,7 @@ namespace Trideria.HexGrid
 		White,
 		Green,
 		Blue,
-		Yellow,
+		Yellow
 	}
 
 	public struct HexTerrain

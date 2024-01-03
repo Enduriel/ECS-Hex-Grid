@@ -4,7 +4,7 @@ using Unity.Mathematics;
 namespace Trideria.View
 {
 	[InternalBufferCapacity(10)]
-	public partial struct ZoomLevelDescriptorElement : IBufferElementData
+	public struct ZoomLevelDescriptorElement : IBufferElementData
 	{
 		public float3 Position;
 		public quaternion Rotation;

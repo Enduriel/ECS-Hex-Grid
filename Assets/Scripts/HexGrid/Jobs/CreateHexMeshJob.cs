@@ -40,7 +40,7 @@ namespace Trideria.HexGrid
 			ref RenderBounds renderBounds,
 			int meshDataArrayIndex)
 		{
-			int vertexAttributeCount = 3;
+			var vertexAttributeCount = 3;
 			var vertexCount = hexes.Length * 18;
 			var triangleIndexCount = vertexCount;
 			var meshData = MeshDataArray[meshDataArrayIndex];
@@ -69,7 +69,7 @@ namespace Trideria.HexGrid
 			{
 				var hexOrigin = HexHelpers.GetRelativePosition(baseCoords, hexBufferElement.Value.Coords,
 					hexBufferElement.Value.Height);
-				for (int i = 0; i < 6; i++)
+				for (var i = 0; i < 6; i++)
 				{
 					AddTriangle(
 						vertices,
@@ -87,7 +87,7 @@ namespace Trideria.HexGrid
 			}
 
 			meshData.subMeshCount = 1;
-			var aabb = new AABB()
+			var aabb = new AABB
 			{
 				Center = float3.zero,
 				Extents = HexHelpers.GetMaxDistanceFromCenter(hexHexGridData)

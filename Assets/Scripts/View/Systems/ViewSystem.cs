@@ -102,7 +102,7 @@ namespace Trideria.View
 				ConfigAspect = aspectRef,
 				ZoomLevels = zoomLevels,
 				DeltaTime = time,
-				RotationSpeed = RotationSpeed,
+				RotationSpeed = RotationSpeed
 			}.Schedule(handle);
 
 			handle = new UpdateCameraJob
@@ -110,7 +110,7 @@ namespace Trideria.View
 				ConfigAspect = aspectRef,
 				ZoomLevels = zoomLevels,
 				DeltaTime = time,
-				ZoomSpeed = ZoomSpeed,
+				ZoomSpeed = ZoomSpeed
 			}.Schedule(handle);
 
 			aspectRef.Dispose(handle);

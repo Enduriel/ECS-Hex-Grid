@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 
@@ -10,14 +11,14 @@ namespace Trideria.Input
 
 		public bool IsZero()
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 
 	public interface IUserInputValue<T>
 	{
-		public bool IsNotZero();
 		public T Value { get; set; }
+		public bool IsNotZero();
 	}
 
 	public interface IUserInput

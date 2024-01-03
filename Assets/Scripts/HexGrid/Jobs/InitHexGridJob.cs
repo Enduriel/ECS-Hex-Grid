@@ -64,14 +64,14 @@ namespace Trideria.HexGrid
 			var currentCoords = new HexCoordinates(0, 0);
 			var idx = 0;
 			hexes[idx++] = CreateHex(currentCoords);
-			for (int i = 0; i < hexGridData.Radius; i++)
+			for (var i = 0; i < hexGridData.Radius; i++)
 			{
 				// each edge within cycle
-				for (int j = 0; j < 6; j++)
+				for (var j = 0; j < 6; j++)
 				{
 					// each hex within edge
 					direction = HexHelpers.DirectionMap[direction];
-					for (int k = 0; k < i; k++)
+					for (var k = 0; k < i; k++)
 					{
 						currentCoords += direction;
 						hexes[idx++] = RandomizeColor(CreateHex(currentCoords));

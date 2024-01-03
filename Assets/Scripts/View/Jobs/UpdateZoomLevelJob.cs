@@ -22,7 +22,9 @@ namespace Trideria.View
 		public void Execute()
 		{
 			if (Aspect.Value.UserScroll.IsValid)
+			{
 				OnScroll(Aspect.Value.UserScroll.ValueRO, ref Aspect.Value.ZoomLevel.ValueRW);
+			}
 		}
 	}
 }

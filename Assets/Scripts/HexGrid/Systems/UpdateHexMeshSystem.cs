@@ -27,7 +27,7 @@ namespace Trideria.HexGrid
 				.CreateCommandBuffer(state.WorldUnmanaged);
 			var id = state.World.GetExistingSystemManaged<AssignMeshSystem>()
 				.AllocateMeshDataArray(out var meshDataArray, _entityQuery.CalculateEntityCount());
-			new CreateHexMeshJob()
+			new CreateHexMeshJob
 			{
 				ECB = ecb.AsParallelWriter(),
 				MeshDataArrayID = id,

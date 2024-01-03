@@ -54,9 +54,13 @@ namespace Trideria.Input
 			if (pressed)
 			{
 				if ((LastFrameState[(int)inputType] & ButtonState.PressedOrHeld) == ButtonState.None)
+				{
 					value = ButtonState.Pressed;
+				}
 				else
+				{
 					value = ButtonState.Held;
+				}
 			}
 			else if ((LastFrameState[(int)inputType] & ButtonState.PressedOrHeld) != ButtonState.None)
 			{

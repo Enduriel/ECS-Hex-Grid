@@ -13,13 +13,13 @@ namespace Trideria.HexGrid
 
 		public static readonly float3[] Vertices =
 		{
-			new float3(-OuterRadius * 0.5f, 0f, InnerRadius),
-			new float3(OuterRadius * 0.5f, 0f, InnerRadius),
-			new float3(OuterRadius, 0f, 0f),
-			new float3(OuterRadius * 0.5f, 0f, -InnerRadius),
-			new float3(-OuterRadius * 0.5f, 0f, -InnerRadius),
-			new float3(-OuterRadius, 0f, 0f),
-			new float3(-OuterRadius * 0.5f, 0f, InnerRadius),
+			new(-OuterRadius * 0.5f, 0f, InnerRadius),
+			new(OuterRadius * 0.5f, 0f, InnerRadius),
+			new(OuterRadius, 0f, 0f),
+			new(OuterRadius * 0.5f, 0f, -InnerRadius),
+			new(-OuterRadius * 0.5f, 0f, -InnerRadius),
+			new(-OuterRadius, 0f, 0f),
+			new(-OuterRadius * 0.5f, 0f, InnerRadius)
 		};
 
 		public static readonly (ushort, ushort, ushort)[] Triangles =
@@ -32,13 +32,6 @@ namespace Trideria.HexGrid
 			(0, 6, 1)
 		};
 
-		public static int GetDistance(HexCoordinates a, HexCoordinates b)
-		{
-			return (math.abs(a.Q - b.Q)
-			        + math.abs(a.Q + a.R - b.Q - b.R)
-			        + math.abs(a.R - b.R)) / 2;
-		}
-
 		public static readonly NativeHashMap<HexCoordinates, HexCoordinates> DirectionMap = new(6, Allocator.Persistent)
 		{
 			{ HexCoordinates.North, HexCoordinates.NorthEast },
@@ -48,6 +41,13 @@ namespace Trideria.HexGrid
 			{ HexCoordinates.SouthWest, HexCoordinates.NorthWest },
 			{ HexCoordinates.NorthWest, HexCoordinates.North }
 		};
+
+		public static int GetDistance(HexCoordinates a, HexCoordinates b)
+		{
+			return (math.abs(a.Q - b.Q)
+			        + math.abs(a.Q + a.R - b.Q - b.R)
+			        + math.abs(a.R - b.R)) / 2;
+		}
 
 		public static int GetNumHexes(int radius)
 		{
@@ -87,7 +87,7 @@ namespace Trideria.HexGrid
 		{
 			var minDistance = float.PositiveInfinity;
 			var minIdx = 0;
-			for (int i = 0; i < buffer.Length; i++)
+			for (var i = 0; i < buffer.Length; i++)
 			{
 				var distance =
 					math.distance(GetWorldPosition(buffer[i].Value.Coords, hexGridTransform, buffer[i].Value.Height),

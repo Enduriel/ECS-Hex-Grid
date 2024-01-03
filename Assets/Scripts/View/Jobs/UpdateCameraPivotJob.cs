@@ -20,10 +20,15 @@ namespace Trideria.View
 		public void Execute(ref LocalTransform localTransform, in CameraPivotTag _)
 		{
 			if (ConfigAspect.Value.UserMovement.IsValid)
+			{
 				OnMove(ref localTransform, ConfigAspect.Value.UserMovement.ValueRO);
+			}
+
 			if (ConfigAspect.Value.UserDrag.IsValid && ConfigAspect.Value.UserMouseMovement.IsValid)
+			{
 				OnDrag(ref localTransform, ConfigAspect.Value.UserDrag.ValueRO,
 					ConfigAspect.Value.UserMouseMovement.ValueRO);
+			}
 		}
 
 		public void OnMove(ref LocalTransform localTransform, UserMovement movement)
@@ -36,7 +41,10 @@ namespace Trideria.View
 		public void OnDrag(ref LocalTransform localTransform, UserDrag drag, UserMouseMovement mouseMovement)
 		{
 			if (drag.State != ButtonState.Held)
+			{
 				return;
+			}
+
 			localTransform.Rotation = math.mul(localTransform.Rotation,
 				quaternion.RotateY(RotationSpeed * mouseMovement.Value.x));
 		}
