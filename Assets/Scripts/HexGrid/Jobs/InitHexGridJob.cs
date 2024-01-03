@@ -1,5 +1,6 @@
 ﻿using BovineLabs.Core.Collections;
 using Components;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
@@ -11,12 +12,14 @@ using UnityEngine.Rendering;
 
 namespace MyNamespace.Jobs
 {
+    [BurstCompile]
     public partial struct InitHexHexGridJob : IJobEntity
     {
 
         // Output
         public EntityCommandBuffer.ParallelWriter ECB;
 
+        [BurstCompile]
         public void Execute(
             [ChunkIndexInQuery] int chunkIdx,
             [EntityIndexInQuery] int idx,

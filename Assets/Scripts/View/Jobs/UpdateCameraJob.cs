@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -15,7 +16,7 @@ namespace View.Jobs
         [ReadOnly] public float ZoomSpeed;
         [ReadOnly] public float DeltaTime;
         
-        [GenerateTestsForBurstCompatibility]
+        [BurstCompile]
         public void Execute(ref LocalTransform localTransform, in CameraTag _)
         {
             UpdatePosition(ZoomLevels[ConfigAspect.Value.ZoomLevel.ValueRO.Value], ref localTransform);

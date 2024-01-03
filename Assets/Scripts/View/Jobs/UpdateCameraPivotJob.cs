@@ -1,5 +1,6 @@
 ﻿using MyNamespace;
 using MyNamespace.Input.Enums;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -9,6 +10,7 @@ using View.Components;
 
 namespace View.Jobs
 {
+    [BurstCompile]
     public partial struct UpdateCameraPivotJob : IJobEntity
     {
         [ReadOnly] public NativeReference<ViewSystemInputAspect> ConfigAspect;
@@ -17,6 +19,7 @@ namespace View.Jobs
         [ReadOnly] public float RotationSpeed;
         [ReadOnly] public float DeltaTime;
         
+        [BurstCompile]
         public void Execute(ref LocalTransform localTransform, in CameraPivotTag _)
         {
             if (ConfigAspect.Value.UserMovement.IsValid)

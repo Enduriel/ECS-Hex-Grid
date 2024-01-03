@@ -1,4 +1,5 @@
 ﻿using Components;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -8,12 +9,14 @@ using UnityEngine.Rendering;
 
 namespace MyNamespace.Jobs
 {
+    [BurstCompile]
     public partial struct CreateHexMeshJob : IJobEntity
     {
         public EntityCommandBuffer.ParallelWriter ECB;
         public Mesh.MeshDataArray MeshDataArray;
         public MeshDataArrayID MeshDataArrayID;
 
+        [BurstCompile]
         public void Execute(
             [ChunkIndexInQuery] int chunkIdx,
             [EntityIndexInQuery] int idx,

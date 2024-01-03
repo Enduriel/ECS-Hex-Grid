@@ -1,5 +1,6 @@
 ﻿using MyNamespace;
 using MyNamespace.Input.Enums;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -9,6 +10,7 @@ using View.Components;
 
 namespace View.Jobs
 {
+    [BurstCompile]
     public struct UpdateZoomLevelJob : IJob
     {
         public NativeReference<ViewSystemInputAspect> Aspect;
@@ -20,7 +22,7 @@ namespace View.Jobs
             zoomLevel.Value = math.clamp(zoomLevel.Value + delta, 0, ZoomLevels.Length - 1);
         }
 
-        [GenerateTestsForBurstCompatibility]
+        [BurstCompile]
         public void Execute()
         {
             if (Aspect.Value.UserScroll.IsValid)
