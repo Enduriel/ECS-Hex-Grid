@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Unity.Collections;
+using Mesh.Components;
 using Unity.Entities;
 using Unity.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Debug = System.Diagnostics.Debug;
 
 namespace MyNamespace
 {

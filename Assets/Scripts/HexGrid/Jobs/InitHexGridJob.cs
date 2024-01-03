@@ -1,5 +1,5 @@
-﻿using BovineLabs.Core.Collections;
-using Components;
+﻿using Components;
+using Mesh.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;

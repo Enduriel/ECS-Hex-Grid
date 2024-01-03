@@ -4,7 +4,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
-using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace MyNamespace.Jobs
@@ -89,18 +88,17 @@ namespace MyNamespace.Jobs
             }, MeshUpdateFlags.DontRecalculateBounds);
 
             renderBounds.Value = aabb;
-            //       vertexAttributes[1] = new VertexAttributeDescriptor(
-            //  VertexAttribute.Normal, dimension: 3, stream: 1
-            // );
-            // vertexAttributes[2] = new VertexAttributeDescriptor(
-            //  VertexAttribute.Tangent, dimension: 4, stream: 2
-            // );
-            // vertexAttributes[3] = new VertexAttributeDescriptor(
-            //  VertexAttribute.TexCoord0, dimension: 2, stream: 3
-            // );
         }
         
-        private void AddTriangle(NativeArray<float3> vertices, NativeArray<ushort> triangles, NativeArray<float3> normals, int idx, float3 v1, float3 v2, float3 v3)
+        private void AddTriangle(
+            NativeArray<float3> vertices, 
+            NativeArray<ushort> triangles, 
+            NativeArray<float3> normals, 
+            
+            int idx, 
+            float3 v1, 
+            float3 v2, 
+            float3 v3)
         {
             vertices[idx] = v1;
             vertices[idx + 1] = v2;
