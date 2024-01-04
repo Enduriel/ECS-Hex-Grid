@@ -2,6 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Trideria.HexGrid
 {
@@ -44,14 +45,7 @@ namespace Trideria.HexGrid
 
 		public static int GetDistance(HexCoordinates a, HexCoordinates b)
 		{
-			return (math.abs(a.Q - b.Q)
-			        + math.abs(a.Q + a.R - b.Q - b.R)
-			        + math.abs(a.R - b.R)) / 2;
-		}
-
-		public static int GetNumHexes(int radius)
-		{
-			return 1 + 3 * radius * (radius - 1);
+			return (math.abs(a.Q - b.Q) + math.abs(a.Q + a.R - b.Q - b.R) + math.abs(a.R - b.R)) / 2;
 		}
 
 		public static float3 GetRelativePosition(HexCoordinates origin, HexCoordinates target, int elevation = 0)
@@ -61,15 +55,6 @@ namespace Trideria.HexGrid
 				elevation * Height,
 				(target.Q - origin.Q) * InnerRadius + (target.R - origin.R) * InnerRadius * 2
 			);
-		}
-
-		// todo improve this function, it's almost certainly overestimating
-		public static float3 GetMaxDistanceFromCenter(HexHexGridData hexGridData)
-		{
-			var x = OuterRadius * 1.5f * (hexGridData.Radius - 1) + OuterRadius * 0.5f;
-			var z = InnerRadius * (hexGridData.Radius - 1) + InnerRadius;
-			var diag = math.sqrt(x * x + z * z);
-			return new float3(diag, 0f, diag);
 		}
 
 		public static float3 GetLocalPosition(HexCoordinates coords, int elevation = 0)
@@ -100,6 +85,40 @@ namespace Trideria.HexGrid
 			}
 
 			return minIdx;
+		}
+
+		public static Color GetColor(AllowedColor allowedColor)
+		{
+			return allowedColor switch
+			{
+				AllowedColor.Green => Color.green,
+				AllowedColor.Blue => Color.blue,
+				AllowedColor.Yellow => Color.yellow,
+				_ => Color.white
+			};
+		}
+
+		// not a fan of having this here but honestly not sure where to put this
+		// so this will do for now
+		public static void AddTriangle(
+			NativeArray<float3> vertices,
+			NativeArray<ushort> triangles,
+			NativeArray<float3> normals,
+			NativeArray<Color> colors,
+			int idx,
+			float3 v1,
+			float3 v2,
+			float3 v3,
+			Color color)
+		{
+			vertices[idx] = v1;
+			vertices[idx + 1] = v2;
+			vertices[idx + 2] = v3;
+			normals[idx + 2] = normals[idx + 1] = normals[idx] = math.normalize(math.cross(v2 - v1, v3 - v1));
+			triangles[idx] = (ushort)idx;
+			triangles[idx + 1] = (ushort)(idx + 1);
+			triangles[idx + 2] = (ushort)(idx + 2);
+			colors[idx] = colors[idx + 1] = colors[idx + 2] = color;
 		}
 	}
 }

@@ -22,6 +22,8 @@ namespace Trideria.Mesh
 		{
 			// this is a frame late, maybe AssignMeshSystem should be moved earlier in the update order
 			// so this can execute in the same frame
+			// this approach is also insanely inefficient
+			// I should instead hav a flat collider and then check collisions during raycasts
 			var ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
 				.CreateCommandBuffer(state.WorldUnmanaged);
 			var system = state.World.GetExistingSystemManaged<EntitiesGraphicsSystem>();
