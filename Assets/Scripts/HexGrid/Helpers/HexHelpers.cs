@@ -12,7 +12,7 @@ namespace Trideria.HexGrid
 		public const float InnerRadius = OuterRadius * 0.866025404f;
 		public const float Height = 0.5f;
 
-		public static readonly float3[] Vertices =
+		private static readonly float3[] Vertices =
 		{
 			new(-OuterRadius * 0.5f, 0f, InnerRadius),
 			new(OuterRadius * 0.5f, 0f, InnerRadius),
@@ -98,27 +98,15 @@ namespace Trideria.HexGrid
 			};
 		}
 
-		// not a fan of having this here but honestly not sure where to put this
-		// so this will do for now
-		public static void AddTriangle(
-			NativeArray<float3> vertices,
-			NativeArray<ushort> triangles,
-			NativeArray<float3> normals,
-			NativeArray<Color> colors,
-			int idx,
-			float3 v1,
-			float3 v2,
-			float3 v3,
-			Color color)
+		public static float3 GetFirstVertex(HexDirection direction)
 		{
-			vertices[idx] = v1;
-			vertices[idx + 1] = v2;
-			vertices[idx + 2] = v3;
-			normals[idx + 2] = normals[idx + 1] = normals[idx] = math.normalize(math.cross(v2 - v1, v3 - v1));
-			triangles[idx] = (ushort)idx;
-			triangles[idx + 1] = (ushort)(idx + 1);
-			triangles[idx + 2] = (ushort)(idx + 2);
-			colors[idx] = colors[idx + 1] = colors[idx + 2] = color;
+			return Vertices[(int) direction];
 		}
+
+		public static float3 GetSecondVertex(HexDirection direction)
+		{
+			return Vertices[(int) direction + 1];
+		}
+
 	}
 }
