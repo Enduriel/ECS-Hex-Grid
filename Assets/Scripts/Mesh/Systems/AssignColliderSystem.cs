@@ -39,10 +39,5 @@ namespace Trideria.Mesh
 				MeshDataArray = meshDataArray
 			}.ScheduleParallel(_query);
 		}
-		
-		public void OnDestroy(ref SystemState state)
-		{
-			_query.Dispose();
-		}
 	}
 }

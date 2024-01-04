@@ -34,10 +34,5 @@ namespace Trideria.HexGrid
 				MeshDataArray = meshDataArray
 			}.ScheduleParallel(_entityQuery);
 		}
-		
-		public void OnDestroy(ref SystemState state)
-		{
-			_entityQuery.Dispose();
-		}
 	}
 }

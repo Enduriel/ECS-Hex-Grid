@@ -18,7 +18,6 @@ namespace Trideria.View
 		public static float RotationSpeed = 0.01f;
 
 		private EntityQuery _requireForUpdateQuery;
-		private EntityQuery _onUpdateQuery;
 
 		public JobHandle test;
 
@@ -118,12 +117,6 @@ namespace Trideria.View
 			zoomLevels.Dispose(handle);
 			state.Dependency = handle;
 			test = handle;
-		}
-
-		public void OnDestroy(ref SystemState state)
-		{
-			_requireForUpdateQuery.Dispose();
-			_onUpdateQuery.Dispose();
 		}
 	}
 }

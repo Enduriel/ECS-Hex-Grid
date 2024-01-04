@@ -94,10 +94,5 @@ namespace Trideria.Mesh
 				UnityEngine.Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, meshes);
 			}
 		}
-		
-		protected override void OnDestroy()
-		{
-			_hexGridQuery.Dispose();
-		}
 	}
 }
