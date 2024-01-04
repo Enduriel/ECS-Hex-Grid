@@ -19,12 +19,12 @@ namespace Trideria.HexGrid
 			[EntityIndexInQuery] int idx,
 			Entity e,
 			ref RenderBounds renderBounds,
-			in HexHexGridData hexGridData)
+			HexGridAspect hexGridAspect)
 		{
 			ECB.AddBuffer<HexBuffer>(chunkIdx, e);
 			var hexes = ECB.SetBuffer<HexBuffer>(chunkIdx, e);
 			// CommandBuffer.RemoveComponent<RenderMeshArray>(chunkIdx, e);
-			hexGridData.Init(hexes);
+			hexGridAspect.Init(hexes);
 			ECB.AddComponent<MeshOutdatedTag>(chunkIdx, e);
 			ECB.AddComponent<SyncColliderWithMeshTag>(chunkIdx, e);
 		}

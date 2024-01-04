@@ -78,5 +78,38 @@ namespace Trideria.HexGrid
 
 			renderBounds.Value = aabb;
 		}
+
+		public static void Init(this HexGridAspect hexGridAspect, DynamicBuffer<HexBuffer> hexes)
+		{
+			if (hexGridAspect.RectHexGridData.IsValid)
+			{
+				hexGridAspect.RectHexGridData.ValueRO.Init(hexes);
+			}
+			else if (hexGridAspect.HexHexGridData.IsValid)
+			{
+				hexGridAspect.HexHexGridData.ValueRO.Init(hexes);
+			}
+			else
+			{
+				Debug.LogError("HexGridData is not valid");
+			}
+		}
+
+		public static void FillMeshData(this HexGridAspect hexGridAspect, DynamicBuffer<HexBuffer> hexes,
+			ref RenderBounds renderBounds, UnityEngine.Mesh.MeshData meshData)
+		{
+			if (hexGridAspect.RectHexGridData.IsValid)
+			{
+				hexGridAspect.RectHexGridData.ValueRO.FillMeshData(hexes, ref renderBounds, meshData);
+			}
+			else if (hexGridAspect.HexHexGridData.IsValid)
+			{
+				hexGridAspect.HexHexGridData.ValueRO.FillMeshData(hexes, ref renderBounds, meshData);
+			}
+			else
+			{
+				Debug.LogError("HexGridData is not valid");
+			}
+		}
 	}
 }

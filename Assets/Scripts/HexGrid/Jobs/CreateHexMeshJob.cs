@@ -22,10 +22,10 @@ namespace Trideria.HexGrid
 			[EntityIndexInQuery] int idx,
 			ref RenderBounds renderBounds,
 			in DynamicBuffer<HexBuffer> hexes,
-			in HexHexGridData hexHexGridData,
+			HexGridAspect hexGridAspect,
 			Entity e)
 		{
-			hexHexGridData.FillMeshData(hexes, ref renderBounds, MeshDataArray[idx]);
+			hexGridAspect.FillMeshData(hexes, ref renderBounds, MeshDataArray[idx]);
 			ECB.AddComponent(chunkIdx, e, new MeshDataArrayComponent
 			{
 				ID = MeshDataArrayID,

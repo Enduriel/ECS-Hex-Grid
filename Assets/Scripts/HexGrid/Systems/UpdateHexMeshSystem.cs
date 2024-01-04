@@ -15,7 +15,8 @@ namespace Trideria.HexGrid
 		{
 			state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
 			_entityQuery = SystemAPI.QueryBuilder()
-				.WithAll<HexBuffer, MaterialMeshInfo, MeshOutdatedTag, RenderBounds, HexHexGridData>()
+				.WithAll<HexBuffer, MaterialMeshInfo, MeshOutdatedTag, RenderBounds>()
+				.WithAspect<HexGridAspect>()
 				.WithNone<MeshDataArrayComponent>()
 				.Build();
 			state.RequireForUpdate(_entityQuery);

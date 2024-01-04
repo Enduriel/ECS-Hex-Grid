@@ -12,7 +12,8 @@ namespace Trideria.HexGrid
 		public void OnCreate(ref SystemState state)
 		{
 			_hexGridQuery = SystemAPI.QueryBuilder()
-				.WithAllRW<HexHexGridData, RenderBounds>()
+				.WithAllRW<RenderBounds>()
+				.WithAspect<HexGridAspect>()
 				.WithNone<HexBuffer>()
 				.Build();
 

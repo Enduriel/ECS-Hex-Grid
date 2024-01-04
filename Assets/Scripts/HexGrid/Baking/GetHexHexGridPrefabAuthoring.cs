@@ -13,7 +13,7 @@ namespace Trideria.HexGrid
 		public GameObject prefab;
 	}
 
-	public class GetPrefabBaker : Baker<GetHexHexGridPrefabAuthoring>
+	public class GetHexHexGridPrefabBaker : Baker<GetHexHexGridPrefabAuthoring>
 	{
 		public override void Bake(GetHexHexGridPrefabAuthoring authoring)
 		{

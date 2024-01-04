@@ -6,18 +6,19 @@ namespace Trideria.HexGrid
 	public class HexHexGridMono : MonoBehaviour
 	{
 		public ushort radius;
-	}
 
-	public class HexHexGridBaker : Baker<HexHexGridMono>
-	{
-		public override void Bake(HexHexGridMono authoring)
+		public class HexHexGridBaker : Baker<HexHexGridMono>
 		{
-			// this can probably be Renderable but would require reworking other stuff, todo later
-			var hexGridEntity = GetEntity(TransformUsageFlags.Dynamic);
-			AddComponent(hexGridEntity, new HexHexGridData
+			public override void Bake(HexHexGridMono authoring)
 			{
-				Radius = authoring.radius
-			});
+				// this can probably be Renderable but would require reworking other stuff, todo later
+				var hexGridEntity = GetEntity(TransformUsageFlags.Dynamic);
+				AddComponent(hexGridEntity, new HexHexGridData
+				{
+					Radius = authoring.radius
+				});
+				AddComponent(hexGridEntity, new HexGridTag());
+			}
 		}
 	}
 }
