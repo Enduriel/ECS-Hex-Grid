@@ -7,20 +7,23 @@ namespace Trideria.HexGrid
 {
 	public struct HexGridMeshDataWrapper
 	{
-		public NativeArray<float3> Vertices;
-		public NativeArray<float3> Normals;
-		public NativeArray<Color> Colors;
-		public NativeArray<ushort> Triangles;
+		public NativeList<float3> Vertices;
+		public NativeList<float3> Normals;
+		public NativeList<Color> Colors;
+		public NativeList<ushort> Triangles;
 
-		public HexGridMeshDataWrapper(UnityEngine.Mesh.MeshData meshData, int numVertices)
+		public void Init(int numVertices, int numTriangles, Allocator allocator)
 		{
-			var vertexAttributeCount = 3;
-			var vertexCount = numVertices;
-			var triangleIndexCount = vertexCount;
+			Vertices = new NativeList<float3>(numVertices, allocator);
+			Normals = new NativeList<float3>(numVertices, allocator);
+			Colors = new NativeList<Color>(numVertices, allocator);
+			Triangles = new NativeList<ushort>(numTriangles, allocator);
+		}
 
-
+		public void FillMeshData(UnityEngine.Mesh.MeshData meshData)
+		{
 			var vertexAttributes = new NativeArray<VertexAttributeDescriptor>(
-				vertexAttributeCount, Allocator.Temp, NativeArrayOptions.UninitializedMemory
+				3, Allocator.Temp, NativeArrayOptions.UninitializedMemory
 			);
 			vertexAttributes[0] = new VertexAttributeDescriptor(dimension: 3);
 			vertexAttributes[1] = new VertexAttributeDescriptor(
@@ -29,14 +32,13 @@ namespace Trideria.HexGrid
 			vertexAttributes[2] = new VertexAttributeDescriptor(
 				VertexAttribute.Color, dimension: 4, stream: 2
 			);
+			meshData.SetVertexBufferParams(Vertices.Length, vertexAttributes);
+			meshData.SetIndexBufferParams(Triangles.Length, IndexFormat.UInt16);
 
-			meshData.SetVertexBufferParams(vertexCount, vertexAttributes);
-			Vertices = meshData.GetVertexData<float3>();
-			Normals = meshData.GetVertexData<float3>(1);
-			Colors = meshData.GetVertexData<Color>(2);
-
-			meshData.SetIndexBufferParams(triangleIndexCount, IndexFormat.UInt16);
-			Triangles = meshData.GetIndexData<ushort>();
+			meshData.GetVertexData<float3>().CopyFrom(Vertices);
+			meshData.GetVertexData<float3>(1).CopyFrom(Normals);
+			meshData.GetVertexData<Color>(2).CopyFrom(Colors);
+			meshData.GetIndexData<ushort>().CopyFrom(Triangles);
 		}
 	}
 }

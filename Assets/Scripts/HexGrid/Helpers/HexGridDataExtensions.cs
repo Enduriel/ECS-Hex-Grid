@@ -27,24 +27,24 @@ namespace Trideria.HexGrid
 			float3 v3,
 			Color color)
 		{
-			meshWrapper.Vertices[idx] = v1;
-			meshWrapper.Vertices[idx + 1] = v2;
-			meshWrapper.Vertices[idx + 2] = v3;
+			var idx = meshWrapper.Vertices.Length;
+			meshWrapper.Vertices.Add(v1);
+			meshWrapper.Vertices.Add(v2);
+			meshWrapper.Vertices.Add(v3);
 
-			meshWrapper.Normals[idx + 2] = meshWrapper.Normals[idx + 1] = meshWrapper.Normals[idx] = math.normalize(math.cross(v2 - v1, v3 - v1));
-			meshWrapper.Triangles[idx] = (ushort)idx;
-			meshWrapper.Triangles[idx + 1] = (ushort)(idx + 1);
-			meshWrapper.Triangles[idx + 2] = (ushort)(idx + 2);
-			meshWrapper.Colors[idx] = meshWrapper.Colors[idx + 1] = meshWrapper.Colors[idx + 2] = color;
+			meshWrapper.Normals.AddReplicate(math.normalize(math.cross(v2 - v1, v3 - v1)), 3);
+			meshWrapper.Triangles.Add((ushort) idx);
+			meshWrapper.Triangles.Add((ushort) (idx + 1));
+			meshWrapper.Triangles.Add((ushort) (idx + 2));
+			meshWrapper.Colors.AddReplicate(color, 3);
 		}
 
-		private static void AddTriangles(HexGridMeshDataWrapper meshWrapper, HexBuffer hex, int idx)
+		private static void AddTriangles(HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
 		{
 			var hexOrigin = HexHelpers.GetRelativePosition(HexCoordinates.Zero, hex.Value.Coords, hex.Value.Height);
 			for (var i = HexDirection.N; i <= HexDirection.NW; i++)
 			{
 				AddTriangle(meshWrapper,
-					idx * 18 + (int)i * 3,
 					hexOrigin,
 					hexOrigin + HexHelpers.GetFirstVertex(i),
 					hexOrigin + HexHelpers.GetSecondVertex(i),
@@ -56,13 +56,15 @@ namespace Trideria.HexGrid
 			UnityEngine.Mesh.MeshData meshData)
 			where T : unmanaged, IHexGridData
 		{
-			var meshWrapper = new HexGridMeshDataWrapper(meshData, hexes.Length * 18);
+			var meshWrapper = new HexGridMeshDataWrapper();
+			meshWrapper.Init(hexes.Length * 18, hexes.Length * 18, Allocator.Temp);
 
-			var j = 0;
 			foreach (var hexBufferElement in hexes)
 			{
-				AddTriangles(meshWrapper, hexBufferElement, j++);
+				AddTriangles(meshWrapper, hexBufferElement);
 			}
+
+			meshWrapper.FillMeshData(meshData);
 
 			meshData.subMeshCount = 1;
 			var aabb = grid.GetBounds(hexes);
