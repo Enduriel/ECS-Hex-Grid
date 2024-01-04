@@ -38,6 +38,10 @@ namespace Trideria.HexGrid
 	{
 		public Hex Value;
 
+		public HexCoordinates Coords => Value.Coords;
+		public Color Color => Value.Color;
+		public int Height => Value.Height;
+
 		public HexBuffer(HexCoordinates coords)
 		{
 			Value = new Hex { Coords = coords };
