@@ -28,12 +28,13 @@ namespace Trideria.HexGrid
 
 		public static bool TryGetNeighbor<T>(this T grid, NativeArray<HexBuffer> hexes, HexBuffer hex,
 			HexDirection direction, out HexBuffer neighbor)
-		where T : unmanaged, IHexGridData
+			where T : unmanaged, IHexGridData
 		{
 			return grid.TryGetNeighbor(hexes, hex, direction.ToCoordinates(), out neighbor);
 		}
 
-		public static bool TryGetNeighbor<T>(this T grid, NativeArray<HexBuffer> hexes, HexBuffer hex, HexCoordinates direction, out HexBuffer neighbor)
+		public static bool TryGetNeighbor<T>(this T grid, NativeArray<HexBuffer> hexes, HexBuffer hex,
+			HexCoordinates direction, out HexBuffer neighbor)
 			where T : unmanaged, IHexGridData
 		{
 			var neighborCoords = hex.Coords + direction;
@@ -45,6 +46,7 @@ namespace Trideria.HexGrid
 					Debug.Log(
 						$"Failed {neighborCoords.Q}, {neighborCoords.R}, {neighborCoords.S} -> {neighbor.Coords.Q}, {neighbor.Coords.R}, {neighbor.Coords.S}");
 				}
+
 				return true;
 			}
 

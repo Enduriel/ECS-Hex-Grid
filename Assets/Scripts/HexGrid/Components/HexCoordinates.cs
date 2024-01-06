@@ -28,15 +28,10 @@ namespace Trideria.HexGrid
 		public static readonly HexCoordinates Zero = new();
 
 		public static readonly HexCoordinates North = new() { Q = 0, R = -1 };
-
 		public static readonly HexCoordinates NorthEast = new() { Q = 1, R = -1 };
-
 		public static readonly HexCoordinates SouthEast = new() { Q = 1, R = 0 };
-
 		public static readonly HexCoordinates South = new() { Q = 0, R = 1 };
-
 		public static readonly HexCoordinates SouthWest = new() { Q = -1, R = 1 };
-
 		public static readonly HexCoordinates NorthWest = new() { Q = -1, R = 0 };
 
 		public bool Equals(HexCoordinates other)
