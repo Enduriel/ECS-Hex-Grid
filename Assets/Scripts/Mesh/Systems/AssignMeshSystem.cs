@@ -92,6 +92,10 @@ namespace Trideria.Mesh
 			foreach (var (_, (meshDataArray, meshes)) in meshDataArrayToMeshMap)
 			{
 				UnityEngine.Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, meshes);
+				foreach (var mesh in meshes)
+				{
+					mesh.RecalculateNormals();
+				}
 			}
 		}
 	}

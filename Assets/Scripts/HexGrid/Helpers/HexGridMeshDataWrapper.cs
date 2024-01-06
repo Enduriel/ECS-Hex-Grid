@@ -23,21 +23,21 @@ namespace Trideria.HexGrid
 		public void FillMeshData(UnityEngine.Mesh.MeshData meshData)
 		{
 			var vertexAttributes = new NativeArray<VertexAttributeDescriptor>(
-				3, Allocator.Temp, NativeArrayOptions.UninitializedMemory
+				2, Allocator.Temp, NativeArrayOptions.UninitializedMemory
 			);
 			vertexAttributes[0] = new VertexAttributeDescriptor(dimension: 3);
+			// vertexAttributes[1] = new VertexAttributeDescriptor(
+			// 	VertexAttribute.Normal, dimension: 3, stream: 1
+			// );
 			vertexAttributes[1] = new VertexAttributeDescriptor(
-				VertexAttribute.Normal, dimension: 3, stream: 1
-			);
-			vertexAttributes[2] = new VertexAttributeDescriptor(
-				VertexAttribute.Color, dimension: 4, stream: 2
+				VertexAttribute.Color, dimension: 4, stream: 1
 			);
 			meshData.SetVertexBufferParams(Vertices.Length, vertexAttributes);
 			meshData.SetIndexBufferParams(Triangles.Length, IndexFormat.UInt16);
 
 			meshData.GetVertexData<float3>().CopyFrom(Vertices);
-			meshData.GetVertexData<float3>(1).CopyFrom(Normals);
-			meshData.GetVertexData<Color>(2).CopyFrom(Colors);
+			// meshData.GetVertexData<float3>(1).CopyFrom(Normals);
+			meshData.GetVertexData<Color>(1).CopyFrom(Colors);
 			meshData.GetIndexData<ushort>().CopyFrom(Triangles);
 		}
 
@@ -67,7 +67,8 @@ namespace Trideria.HexGrid
 			Vertices.Add(v2);
 			Vertices.Add(v3);
 			// placeholder normals
-			Normals.AddReplicate(new float3(0, 1, 0), 3);
+
+			// Normals.AddReplicate(math.cross(math.cross(v1, v2), v3), 3);
 			AddTriangle(idx, idx + 1, idx + 2);
 		}
 
@@ -92,7 +93,7 @@ namespace Trideria.HexGrid
 			Vertices.Add(v3);
 			Vertices.Add(v4);
 
-			Normals.AddReplicate(new float3(0, 1, 0), 4);
+			// Normals.AddReplicate(new float3(0, 1, 0), 4);
 
 			AddTriangle(idx, idx + 2, idx + 1);
 			AddTriangle(idx + 1, idx + 2, idx + 3);
