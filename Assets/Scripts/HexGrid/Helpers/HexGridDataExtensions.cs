@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
 using UnityEngine;
@@ -50,13 +51,19 @@ namespace Trideria.HexGrid
 			neighbor = default;
 			return false;
 		}
+
+		private static void AddTriangleColors(HexGridMeshDataWrapper meshDataWrapper, Color c1, Color c2, Color c3)
+		{
+			meshDataWrapper.Colors.Add(c1);
+			meshDataWrapper.Colors.Add(c2);
+			meshDataWrapper.Colors.Add(c3);
+		}
+
 		private static void AddTriangle(
 			HexGridMeshDataWrapper meshWrapper,
-			int idx,
 			float3 v1,
 			float3 v2,
-			float3 v3,
-			Color color)
+			float3 v3)
 		{
 			var idx = meshWrapper.Vertices.Length;
 			meshWrapper.Vertices.Add(v1);
@@ -67,7 +74,6 @@ namespace Trideria.HexGrid
 			meshWrapper.Triangles.Add((ushort) idx);
 			meshWrapper.Triangles.Add((ushort) (idx + 1));
 			meshWrapper.Triangles.Add((ushort) (idx + 2));
-			meshWrapper.Colors.AddReplicate(color, 3);
 		}
 
 		private static void AddTriangles<T>(this T grid, NativeArray<HexBuffer> hexes, HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
@@ -79,8 +85,20 @@ namespace Trideria.HexGrid
 				AddTriangle(meshWrapper,
 					hexOrigin,
 					hexOrigin + HexHelpers.GetFirstVertex(i),
-					hexOrigin + HexHelpers.GetSecondVertex(i),
-					hex.Value.Color);
+					hexOrigin + HexHelpers.GetSecondVertex(i));
+
+				if (i == HexDirection.S)
+				{
+					AddTriangleColors(meshWrapper, Color.white, Color.red, Color.red);
+				}
+				else if (grid.TryGetNeighbor(hexes, hex, i, out var neighbor))
+				{
+					AddTriangleColors(meshWrapper, hex.Color, neighbor.Color, neighbor.Color);
+				}
+				else
+				{
+					AddTriangleColors(meshWrapper, hex.Color, hex.Color, hex.Color);
+				}
 			}
 		}
 
