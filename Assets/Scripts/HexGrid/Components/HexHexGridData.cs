@@ -54,23 +54,23 @@ namespace Trideria.HexGrid
 		public readonly IEnumerable<HexCoordinates> GetHexes()
 		{
 			yield return HexCoordinates.Zero;
-			var rectStart = HexCoordinates.North;
+			var startDirection = HexDirection.N;
 			for (var rect = 0; rect < 3; rect++)
 			{
-				var rectCol = rectStart;
+				var rectCol = startDirection.ToCoordinates();
 				for (var i = 0; i < Radius; i++)
 				{
 					var rectRow = rectCol;
 					for (var j = 0; j < Radius - 1; j++)
 					{
 						yield return rectRow;
-						rectRow += rectStart;
+						rectRow += startDirection.ToCoordinates();
 					}
 
-					rectCol += HexHelpers.DirectionMap[HexHelpers.DirectionMap[rectStart]];
+					rectCol += startDirection.Next().Next().ToCoordinates();
 				}
 
-				rectStart = HexHelpers.DirectionMap[HexHelpers.DirectionMap[rectStart]];
+				startDirection = startDirection.Next().Next();
 			}
 		}
 	}

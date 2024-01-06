@@ -30,7 +30,7 @@ namespace Trideria.HexGrid
 			HexDirection direction, out HexBuffer neighbor)
 		where T : unmanaged, IHexGridData
 		{
-			return grid.TryGetNeighbor(hexes, hex, HexHelpers.DirectionCoordinateMap[(int)direction], out neighbor);
+			return grid.TryGetNeighbor(hexes, hex, direction.ToCoordinates(), out neighbor);
 		}
 
 		public static bool TryGetNeighbor<T>(this T grid, NativeArray<HexBuffer> hexes, HexBuffer hex, HexCoordinates direction, out HexBuffer neighbor)
