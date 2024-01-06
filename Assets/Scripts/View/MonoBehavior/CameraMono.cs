@@ -1,6 +1,6 @@
 ﻿namespace Trideria.View
 {
-	public class CameraMono : EntityFollower<CameraTag>
+	public class CameraMono : EntitySetterAndFollower<CameraTag>
 	{
 	}
 }

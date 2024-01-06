@@ -1,6 +1,6 @@
 ﻿namespace Trideria.View
 {
-	public class CameraPivotMono : EntityFollower<CameraPivotTag>
+	public class CameraPivotMono : EntitySetterAndFollower<CameraPivotTag>
 	{
 	}
 }
