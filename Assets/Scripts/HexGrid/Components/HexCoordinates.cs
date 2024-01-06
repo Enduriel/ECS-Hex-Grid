@@ -52,5 +52,15 @@ namespace Trideria.HexGrid
 		{
 			return HashCode.Combine(Q, R);
 		}
+
+		public static bool operator ==(HexCoordinates left, HexCoordinates right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(HexCoordinates left, HexCoordinates right)
+		{
+			return !(left == right);
+		}
 	}
 }
