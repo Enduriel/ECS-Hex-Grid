@@ -25,6 +25,31 @@ namespace Trideria.HexGrid
 			}
 		}
 
+		public static bool TryGetNeighbor<T>(this T grid, NativeArray<HexBuffer> hexes, HexBuffer hex,
+			HexDirection direction, out HexBuffer neighbor)
+		where T : unmanaged, IHexGridData
+		{
+			return grid.TryGetNeighbor(hexes, hex, HexHelpers.DirectionCoordinateMap[(int)direction], out neighbor);
+		}
+
+		public static bool TryGetNeighbor<T>(this T grid, NativeArray<HexBuffer> hexes, HexBuffer hex, HexCoordinates direction, out HexBuffer neighbor)
+			where T : unmanaged, IHexGridData
+		{
+			var neighborCoords = hex.Coords + direction;
+			if (grid.TryGetHexIndex(neighborCoords, out var idx))
+			{
+				neighbor = hexes[idx];
+				if (!neighbor.Coords.Equals(neighborCoords))
+				{
+					Debug.Log(
+						$"Failed {neighborCoords.Q}, {neighborCoords.R}, {neighborCoords.S} -> {neighbor.Coords.Q}, {neighbor.Coords.R}, {neighbor.Coords.S}");
+				}
+				return true;
+			}
+
+			neighbor = default;
+			return false;
+		}
 		private static void AddTriangle(
 			HexGridMeshDataWrapper meshWrapper,
 			int idx,
