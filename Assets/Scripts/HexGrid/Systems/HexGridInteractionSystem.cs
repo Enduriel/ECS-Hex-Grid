@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Trideria.HexGrid
 {
@@ -17,12 +18,31 @@ namespace Trideria.HexGrid
 
 		public void OnCreate(ref SystemState state)
 		{
-			state.RequireForUpdate<AllowedColorComponent>();
+			state.RequireForUpdate<HexEditorInputComponent>();
 			state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
 			state.RequireForUpdate<PhysicsWorldSingleton>();
 			state.RequireForUpdate<UserMouseInfo>();
 			_hexGridQuery = SystemAPI.QueryBuilder().WithAll<UserSelect, UserMouseInfo>().Build();
 			state.RequireForUpdate(_hexGridQuery);
+		}
+
+		private void OnRayHit(ref SystemState state, RaycastHit hit)
+		{
+			var buffer = SystemAPI.GetBuffer<HexBuffer>(hit.Entity);
+			var localTransform = SystemAPI.GetComponentRO<LocalTransform>(hit.Entity);
+			var hexIdx = HexHelpers.GetHexIdxAtPosition(buffer, localTransform.ValueRO, hit.Position);
+			buffer[hexIdx] = OnTouchHex(ref state, buffer[hexIdx]);
+			var ecb = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
+				.CreateCommandBuffer(state.WorldUnmanaged);
+			ecb.AddComponent<MeshOutdatedTag>(hit.Entity);
+		}
+
+		private HexBuffer OnTouchHex(ref SystemState state, HexBuffer hex)
+		{
+			var data = SystemAPI.GetSingleton<HexEditorInputComponent>();
+			hex.Color = HexHelpers.GetColor(data.Color);
+			hex.Height = data.Height;
+			return hex;
 		}
 
 		public void OnUpdate(ref SystemState state)
@@ -42,18 +62,9 @@ namespace Trideria.HexGrid
 				Filter = CollisionFilter.Default
 			};
 
-
 			if (collisionWorld.CastRay(test, out var hit))
 			{
-				var buffer = SystemAPI.GetBuffer<HexBuffer>(hit.Entity);
-				var localTransform = SystemAPI.GetComponentRO<LocalTransform>(hit.Entity);
-				var hexIdx = HexHelpers.GetHexIdxAtPosition(buffer, localTransform.ValueRO, hit.Position);
-				var hex = buffer[hexIdx];
-				hex.Value.Color = HexHelpers.GetColor(SystemAPI.GetSingleton<AllowedColorComponent>().Value);
-				buffer[hexIdx] = hex;
-				var ecb = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
-					.CreateCommandBuffer(state.WorldUnmanaged);
-				ecb.AddComponent<MeshOutdatedTag>(hit.Entity);
+				OnRayHit(ref state, hit);
 			}
 		}
 	}

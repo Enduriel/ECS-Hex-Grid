@@ -47,8 +47,17 @@ namespace Trideria.HexGrid
 		public Hex Value;
 
 		public HexCoordinates Coords => Value.Coords;
-		public Color Color => Value.Color;
-		public int Height => Value.Height;
+		public Color Color
+		{
+			get => Value.Color;
+			set => Value.Color = value;
+		}
+
+		public int Height
+		{
+			get => Value.Height;
+			set => Value.Height = value;
+		}
 
 		public HexBuffer(HexCoordinates coords)
 		{
