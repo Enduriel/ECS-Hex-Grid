@@ -1,4 +1,5 @@
-﻿using Trideria.Input;
+﻿using Trideria.HexGrid;
+using Trideria.Input;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -41,29 +42,29 @@ namespace Trideria.View
 			var zoomLevelBuffer = ecb.SetBuffer<ZoomLevelDescriptorElement>(configSingleton);
 			// this should be set up to read from something in the editor probably
 			zoomLevelBuffer.Add(new ZoomLevelDescriptorElement(
-				new float3(0, 50f, 0),
+				new float3(0, 50f * HexHelpers.OuterRadius, 0),
 				quaternion.Euler(math.radians(85), 0, 0),
-				50f));
+				50f * HexHelpers.OuterRadius));
 			zoomLevelBuffer.Add(new ZoomLevelDescriptorElement(
-				new float3(0, 30f, 0),
+				new float3(0, 30f * HexHelpers.OuterRadius, 0),
 				quaternion.Euler(math.radians(80), 0, 0),
-				30f));
+				30f * HexHelpers.OuterRadius));
 			zoomLevelBuffer.Add(new ZoomLevelDescriptorElement(
-				new float3(0, 20f, 0),
+				new float3(0, 20f * HexHelpers.OuterRadius, 0),
 				quaternion.Euler(math.radians(70), 0, 0),
-				20f));
+				20f * HexHelpers.OuterRadius));
 			zoomLevelBuffer.Add(new ZoomLevelDescriptorElement(
-				new float3(0, 15f, 0),
+				new float3(0, 15f * HexHelpers.OuterRadius, 0),
 				quaternion.Euler(math.radians(75), 0, 0),
-				15f));
+				15f * HexHelpers.OuterRadius));
 			zoomLevelBuffer.Add(new ZoomLevelDescriptorElement(
-				new float3(0, 10f, 0),
+				new float3(0, 10f * HexHelpers.OuterRadius, 0),
 				quaternion.Euler(math.radians(60), 0, 0),
-				10f));
+				10f * HexHelpers.OuterRadius));
 			zoomLevelBuffer.Add(new ZoomLevelDescriptorElement(
-				new float3(0, 5f, 0),
+				new float3(0, 5f * HexHelpers.OuterRadius, 0),
 				quaternion.Euler(math.radians(30), 0, 0),
-				10f));
+				10f * HexHelpers.OuterRadius));
 			ecb.AddComponent<ZoomLevel>(configSingleton);
 
 			var camera = ecb.CreateEntity();
