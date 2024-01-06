@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="HexColors" style="flex-grow: 1;">
+        <ui:EnumField type="Trideria.HexGrid.AllowedColor, Assembly-CSharp" name="HexColorSelector" style="height: 35px; width: 120px; font-size: 12px; align-self: flex-end;" />
+    </ui:VisualElement>
+</ui:UXML>

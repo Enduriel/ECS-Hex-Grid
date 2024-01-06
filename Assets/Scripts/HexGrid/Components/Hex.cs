@@ -10,6 +10,14 @@ namespace Trideria.HexGrid
 		public Color Color;
 	}
 
+	public enum AllowedColor
+	{
+		Yellow,
+		Green,
+		Blue,
+		White
+	}
+
 	public enum HexTerrainEnum
 	{
 		White,
