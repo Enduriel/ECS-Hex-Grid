@@ -131,16 +131,5 @@ namespace Trideria.HexGrid
 		{
 			return Vertices[(int) direction + 1] * SolidFraction;
 		}
-
-		public static HexDirection GetCounterClockwise(HexDirection direction)
-		{
-			return direction == HexDirection.N ? HexDirection.NW : direction - 1;
-		}
-
-		public static HexDirection GetClockwise(HexDirection direction)
-		{
-			return direction == HexDirection.NW ? HexDirection.N : direction + 1;
-		}
-
 	}
 }
