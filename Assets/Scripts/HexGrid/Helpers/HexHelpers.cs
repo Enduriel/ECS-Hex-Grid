@@ -53,7 +53,7 @@ namespace Trideria.HexGrid
 			return new float3(
 				(target.Q - origin.Q) * OuterRadius * 1.5f,
 				elevation * Height,
-				(target.Q - origin.Q) * InnerRadius + (target.R - origin.R) * InnerRadius * 2
+				- ((target.Q - origin.Q) * InnerRadius + (target.R - origin.R) * InnerRadius * 2)
 			);
 		}
 
