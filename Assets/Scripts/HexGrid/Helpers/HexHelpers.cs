@@ -110,5 +110,10 @@ namespace Trideria.HexGrid
 		{
 			return Vertices[(int) direction + 1] * SolidFraction;
 		}
+
+		public static float3 GetBridge (HexDirection direction)
+		{
+			return (Vertices[(int)direction] + Vertices[(int)direction + 1]) * BlendFraction;
+		}
 	}
 }

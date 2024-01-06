@@ -70,5 +70,32 @@ namespace Trideria.HexGrid
 			Normals.AddReplicate(new float3(0, 1, 0), 3);
 			AddTriangle(idx, idx + 1, idx + 2);
 		}
+
+		public void AddQuadColors(Color c1, Color c2, Color c3, Color c4)
+		{
+			Colors.Add(c1);
+			Colors.Add(c2);
+			Colors.Add(c3);
+			Colors.Add(c4);
+		}
+
+		public void AddQuadColors(Color c1, Color c2)
+		{
+			AddQuadColors(c1, c1, c2, c2);
+		}
+
+		public void AddQuad(float3 v1, float3 v2, float3 v3, float3 v4)
+		{
+			var idx = Vertices.Length;
+			Vertices.Add(v1);
+			Vertices.Add(v2);
+			Vertices.Add(v3);
+			Vertices.Add(v4);
+
+			Normals.AddReplicate(new float3(0, 1, 0), 4);
+
+			AddTriangle(idx, idx + 2, idx + 1);
+			AddTriangle(idx + 1, idx + 2, idx + 3);
+		}
 	}
 }

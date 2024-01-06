@@ -54,6 +54,33 @@ namespace Trideria.HexGrid
 			return false;
 		}
 
+		private static void AddHexBorder<T>(this T grid, NativeArray<HexBuffer> hexes,
+			HexGridMeshDataWrapper meshWrapper, HexBuffer hex, HexDirection direction, float3 v1, float3 v2)
+			where T : unmanaged, IHexGridData
+		{
+			if (!grid.TryGetNeighbor(hexes, hex, direction, out var neighbor))
+			{
+				return;
+			}
+
+			var bridge = HexHelpers.GetBridge(direction);
+			var v3 = v1 + bridge;
+			var v4 = v2 + bridge;
+
+			meshWrapper.AddQuad(v1, v2, v3, v4);
+			meshWrapper.AddQuadColors(hex.Color, neighbor.Color);
+
+			direction = direction.Next();
+
+			if (direction < HexDirection.SE || !grid.TryGetNeighbor(hexes, hex, direction, out var nextNeighbor))
+			{
+				return;
+			}
+
+			meshWrapper.AddTriangle(v2, v4, v2 + HexHelpers.GetBridge(direction));
+			meshWrapper.AddTriangleColors(hex.Color, neighbor.Color, nextNeighbor.Color);
+		}
+
 		private static void AddTriangles<T>(this T grid, NativeArray<HexBuffer> hexes,
 			HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
 			where T : unmanaged, IHexGridData
@@ -69,20 +96,12 @@ namespace Trideria.HexGrid
 					v1,
 					v2);
 
-				var counterClockwiseHex =
-					grid.TryGetNeighbor(hexes, hex, HexHelpers.GetCounterClockwise(i), out var foundCounterClockwiseHex)
-						? foundCounterClockwiseHex
-						: hex;
-				var clockwiseHex =
-					grid.TryGetNeighbor(hexes, hex, HexHelpers.GetClockwise(i), out var foundClockwiseHex)
-						? foundClockwiseHex
-						: hex;
-				var neighbor = grid.TryGetNeighbor(hexes, hex, i, out var foundNeighbor) ? foundNeighbor : hex;
+				meshWrapper.AddTriangleColor(hex.Color);
 
-				meshWrapper.AddTriangleColors(
-					hex.Color,
-					(hex.Color + neighbor.Color + counterClockwiseHex.Color) / 3f,
-					(hex.Color + neighbor.Color + clockwiseHex.Color) / 3f);
+				if (i < HexDirection.S)
+				{
+					grid.AddHexBorder(hexes, meshWrapper, hex, i, v1, v2);
+				}
 			}
 		}
 
