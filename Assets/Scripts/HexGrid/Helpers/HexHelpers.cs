@@ -8,9 +8,9 @@ namespace Trideria.HexGrid
 {
 	public static class HexHelpers
 	{
-		public const float OuterRadius = 1f;
+		public const float OuterRadius = 10f;
 		public const float InnerRadius = OuterRadius * 0.866025404f;
-		public const float Height = 0.5f;
+		public const float Height = 5f;
 
 		private static readonly float3[] Vertices =
 		{
