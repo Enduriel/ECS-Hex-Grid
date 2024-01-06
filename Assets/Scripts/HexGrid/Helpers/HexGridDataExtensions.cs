@@ -66,6 +66,9 @@ namespace Trideria.HexGrid
 			var bridge = HexHelpers.GetBridge(direction);
 			var v3 = v1 + bridge;
 			var v4 = v2 + bridge;
+			var neighborHeight = neighbor.Height * HexHelpers.Height;
+			v3.y = neighborHeight;
+			v4.y = neighborHeight;
 
 			meshWrapper.AddQuad(v1, v2, v3, v4);
 			meshWrapper.AddQuadColors(hex.Color, neighbor.Color);
@@ -77,7 +80,10 @@ namespace Trideria.HexGrid
 				return;
 			}
 
-			meshWrapper.AddTriangle(v2, v4, v2 + HexHelpers.GetBridge(direction));
+			var v5 = v2 + HexHelpers.GetBridge(direction);
+			v5.y = nextNeighbor.Height * HexHelpers.Height;
+
+			meshWrapper.AddTriangle(v2, v4, v5);
 			meshWrapper.AddTriangleColors(hex.Color, neighbor.Color, nextNeighbor.Color);
 		}
 
