@@ -43,6 +43,17 @@ namespace Trideria.HexGrid
 			{ HexCoordinates.NorthWest, HexCoordinates.North }
 		};
 
+		public static readonly NativeList<HexCoordinates> DirectionCoordinateMap =
+			new(6, Allocator.Persistent)
+			{
+				HexCoordinates.North,
+				HexCoordinates.NorthEast,
+				HexCoordinates.SouthEast,
+				HexCoordinates.South,
+				HexCoordinates.SouthWest,
+				HexCoordinates.NorthWest,
+			};
+
 		public static int GetDistance(HexCoordinates a, HexCoordinates b)
 		{
 			return (math.abs(a.Q - b.Q) + math.abs(a.Q + a.R - b.Q - b.R) + math.abs(a.R - b.R)) / 2;
