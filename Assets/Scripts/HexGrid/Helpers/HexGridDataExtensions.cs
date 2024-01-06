@@ -52,53 +52,35 @@ namespace Trideria.HexGrid
 			return false;
 		}
 
-		private static void AddTriangleColors(HexGridMeshDataWrapper meshDataWrapper, Color c1, Color c2, Color c3)
+		private static void AddTriangles<T>(this T grid, NativeArray<HexBuffer> hexes,
+			HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
+			where T : unmanaged, IHexGridData
 		{
-			meshDataWrapper.Colors.Add(c1);
-			meshDataWrapper.Colors.Add(c2);
-			meshDataWrapper.Colors.Add(c3);
-		}
-
-		private static void AddTriangle(
-			HexGridMeshDataWrapper meshWrapper,
-			float3 v1,
-			float3 v2,
-			float3 v3)
-		{
-			var idx = meshWrapper.Vertices.Length;
-			meshWrapper.Vertices.Add(v1);
-			meshWrapper.Vertices.Add(v2);
-			meshWrapper.Vertices.Add(v3);
-
-			meshWrapper.Normals.AddReplicate(math.normalize(math.cross(v2 - v1, v3 - v1)), 3);
-			meshWrapper.Triangles.Add((ushort) idx);
-			meshWrapper.Triangles.Add((ushort) (idx + 1));
-			meshWrapper.Triangles.Add((ushort) (idx + 2));
-		}
-
-		private static void AddTriangles<T>(this T grid, NativeArray<HexBuffer> hexes, HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
-		where T : unmanaged, IHexGridData
-		{
-			var hexOrigin = HexHelpers.GetRelativePosition(HexCoordinates.Zero, hex.Value.Coords, hex.Value.Height);
+			var vCenter = HexHelpers.GetRelativePosition(HexCoordinates.Zero, hex.Value.Coords, hex.Value.Height);
 			for (var i = HexDirection.N; i <= HexDirection.NW; i++)
 			{
-				AddTriangle(meshWrapper,
-					hexOrigin,
-					hexOrigin + HexHelpers.GetFirstVertex(i),
-					hexOrigin + HexHelpers.GetSecondVertex(i));
+				var v1 = vCenter + HexHelpers.GetFirstSolidVertex(i);
+				var v2 = vCenter + HexHelpers.GetSecondSolidVertex(i);
 
-				if (i == HexDirection.S)
-				{
-					AddTriangleColors(meshWrapper, Color.white, Color.red, Color.red);
-				}
-				else if (grid.TryGetNeighbor(hexes, hex, i, out var neighbor))
-				{
-					AddTriangleColors(meshWrapper, hex.Color, neighbor.Color, neighbor.Color);
-				}
-				else
-				{
-					AddTriangleColors(meshWrapper, hex.Color, hex.Color, hex.Color);
-				}
+				meshWrapper.AddTriangle(
+					vCenter,
+					v1,
+					v2);
+
+				var counterClockwiseHex =
+					grid.TryGetNeighbor(hexes, hex, HexHelpers.GetCounterClockwise(i), out var foundCounterClockwiseHex)
+						? foundCounterClockwiseHex
+						: hex;
+				var clockwiseHex =
+					grid.TryGetNeighbor(hexes, hex, HexHelpers.GetClockwise(i), out var foundClockwiseHex)
+						? foundClockwiseHex
+						: hex;
+				var neighbor = grid.TryGetNeighbor(hexes, hex, i, out var foundNeighbor) ? foundNeighbor : hex;
+
+				meshWrapper.AddTriangleColors(
+					hex.Color,
+					(hex.Color + neighbor.Color + counterClockwiseHex.Color) / 3f,
+					(hex.Color + neighbor.Color + clockwiseHex.Color) / 3f);
 			}
 		}
 

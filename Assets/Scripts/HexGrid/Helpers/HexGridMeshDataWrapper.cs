@@ -40,5 +40,35 @@ namespace Trideria.HexGrid
 			meshData.GetVertexData<Color>(2).CopyFrom(Colors);
 			meshData.GetIndexData<ushort>().CopyFrom(Triangles);
 		}
+
+		public void AddTriangle(int idx, int idx1, int idx2)
+		{
+			Triangles.Add((ushort) idx);
+			Triangles.Add((ushort) idx1);
+			Triangles.Add((ushort) idx2);
+		}
+
+		public void AddTriangleColors(Color c1, Color c2, Color c3)
+		{
+			Colors.Add(c1);
+			Colors.Add(c2);
+			Colors.Add(c3);
+		}
+
+		public void AddTriangleColor(Color c)
+		{
+			AddTriangleColors(c, c, c);
+		}
+
+		public void AddTriangle(float3 v1, float3 v2, float3 v3)
+		{
+			var idx = Vertices.Length;
+			Vertices.Add(v1);
+			Vertices.Add(v2);
+			Vertices.Add(v3);
+			// placeholder normals
+			Normals.AddReplicate(new float3(0, 1, 0), 3);
+			AddTriangle(idx, idx + 1, idx + 2);
+		}
 	}
 }

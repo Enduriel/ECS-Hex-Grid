@@ -12,6 +12,9 @@ namespace Trideria.HexGrid
 		public const float InnerRadius = OuterRadius * 0.866025404f;
 		public const float Height = 5f;
 
+		public const float SolidFraction = 0.8f;
+		public const float BlendFraction = 1f - SolidFraction;
+
 		private static readonly float3[] Vertices =
 		{
 			new(-OuterRadius * 0.5f, 0f, InnerRadius),
@@ -117,6 +120,26 @@ namespace Trideria.HexGrid
 		public static float3 GetSecondVertex(HexDirection direction)
 		{
 			return Vertices[(int) direction + 1];
+		}
+
+		public static float3 GetFirstSolidVertex(HexDirection direction)
+		{
+			return Vertices[(int) direction] * SolidFraction;
+		}
+
+		public static float3 GetSecondSolidVertex(HexDirection direction)
+		{
+			return Vertices[(int) direction + 1] * SolidFraction;
+		}
+
+		public static HexDirection GetCounterClockwise(HexDirection direction)
+		{
+			return direction == HexDirection.N ? HexDirection.NW : direction - 1;
+		}
+
+		public static HexDirection GetClockwise(HexDirection direction)
+		{
+			return direction == HexDirection.NW ? HexDirection.N : direction + 1;
 		}
 
 	}
