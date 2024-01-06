@@ -11,7 +11,7 @@ namespace Trideria.HexGrid
 		public ushort Height;
 
 		// heavily overestimates
-		public AABB GetBounds(DynamicBuffer<HexBuffer> hexes)
+		public readonly AABB GetBounds(NativeArray<HexBuffer> hexes)
 		{
 			var width = Width * HexHelpers.InnerRadius * 2;
 			var height = Height * HexHelpers.OuterRadius * 2;

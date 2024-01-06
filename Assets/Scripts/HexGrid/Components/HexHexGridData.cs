@@ -8,7 +8,7 @@ namespace Trideria.HexGrid
 	{
 		public ushort Radius;
 
-		public readonly AABB GetBounds(DynamicBuffer<HexBuffer> hexes)
+		public readonly AABB GetBounds(NativeArray<HexBuffer> hexes)
 		{
 			// todo improve this function, it's almost certainly overestimating
 			var x = HexHelpers.OuterRadius * 1.5f * (Radius - 1) + HexHelpers.OuterRadius * 0.5f;

@@ -25,7 +25,7 @@ namespace Trideria.HexGrid
 			HexGridAspect hexGridAspect,
 			Entity e)
 		{
-			hexGridAspect.FillMeshData(hexes, ref renderBounds, MeshDataArray[idx]);
+			hexGridAspect.FillMeshData(hexes.AsNativeArray(), ref renderBounds, MeshDataArray[idx]);
 			ECB.AddComponent(chunkIdx, e, new MeshDataArrayComponent
 			{
 				ID = MeshDataArrayID,

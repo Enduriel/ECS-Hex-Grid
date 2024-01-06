@@ -6,7 +6,7 @@ namespace Trideria.HexGrid
 {
 	public interface IHexGridData
 	{
-		public AABB GetBounds(DynamicBuffer<HexBuffer> hexes);
+		public AABB GetBounds(NativeArray<HexBuffer> hexes);
 
 		public int GetNumHexes();
 

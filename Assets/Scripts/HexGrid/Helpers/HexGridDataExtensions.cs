@@ -12,6 +12,12 @@ namespace Trideria.HexGrid
 			where T : unmanaged, IHexGridData
 		{
 			hexes.ResizeUninitialized(grid.GetNumHexes());
+			grid.Init(hexes.AsNativeArray());
+		}
+
+		public static void Init<T>(this T grid, NativeArray<HexBuffer> hexes)
+			where T : unmanaged, IHexGridData
+		{
 			var idx = 0;
 			foreach (var hexCoords in grid.GetHexes())
 			{
@@ -39,7 +45,8 @@ namespace Trideria.HexGrid
 			meshWrapper.Colors.AddReplicate(color, 3);
 		}
 
-		private static void AddTriangles(HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
+		private static void AddTriangles<T>(this T grid, NativeArray<HexBuffer> hexes, HexGridMeshDataWrapper meshWrapper, HexBuffer hex)
+		where T : unmanaged, IHexGridData
 		{
 			var hexOrigin = HexHelpers.GetRelativePosition(HexCoordinates.Zero, hex.Value.Coords, hex.Value.Height);
 			for (var i = HexDirection.N; i <= HexDirection.NW; i++)
@@ -52,7 +59,7 @@ namespace Trideria.HexGrid
 			}
 		}
 
-		public static void FillMeshData<T>(this T grid, DynamicBuffer<HexBuffer> hexes, ref RenderBounds renderBounds,
+		public static void FillMeshData<T>(this T grid, NativeArray<HexBuffer> hexes, ref RenderBounds renderBounds,
 			UnityEngine.Mesh.MeshData meshData)
 			where T : unmanaged, IHexGridData
 		{
@@ -61,7 +68,7 @@ namespace Trideria.HexGrid
 
 			foreach (var hexBufferElement in hexes)
 			{
-				AddTriangles(meshWrapper, hexBufferElement);
+				grid.AddTriangles(hexes, meshWrapper, hexBufferElement);
 			}
 
 			meshWrapper.FillMeshData(meshData);
@@ -92,7 +99,7 @@ namespace Trideria.HexGrid
 			}
 		}
 
-		public static void FillMeshData(this HexGridAspect hexGridAspect, DynamicBuffer<HexBuffer> hexes,
+		public static void FillMeshData(this HexGridAspect hexGridAspect, NativeArray<HexBuffer> hexes,
 			ref RenderBounds renderBounds, UnityEngine.Mesh.MeshData meshData)
 		{
 			if (hexGridAspect.RectHexGridData.IsValid)
