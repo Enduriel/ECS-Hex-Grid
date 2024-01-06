@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
@@ -29,15 +30,24 @@ namespace Trideria.HexGrid
 
 		// based on https://www.redblobgames.com/x/2317-hexagon-shaped-hex-map-storage and
 		// https://old.reddit.com/r/gamedev/comments/133gv7l/i_might_have_figured_out_new_way_to_store_hex/
-		public readonly int GetHexIndex(HexCoordinates hex)
+		public readonly bool TryGetHexIndex(HexCoordinates hex, out int idx)
 		{
-			return hex switch
+			if (HexHelpers.GetDistance(HexCoordinates.Zero, hex) > Radius - 1)
 			{
-				{ Q: >= 0, R: < 0 } => hex.Q * Radius - hex.R,
-				{ R: >= 0, S: < 0 } => Radius * (Radius + 1 + hex.R) - hex.S,
-				{ S: >= 0, Q: < 0 } => Radius * (2 * (Radius + 1) + hex.S) - hex.Q,
-				_ => 0
+				idx = -1;
+				return false;
+			}
+
+			idx = hex switch
+			{
+				{ Q: >= 0, R: < 0 } => (Radius - 1) * hex.Q - hex.R,
+				{ R: >= 0, S: < 0 } => (Radius - 1) * (Radius + hex.R) - hex.S,
+				{ S: >= 0, Q: < 0 } => (Radius - 1) * (2 * Radius + hex.S) - hex.Q,
+				{ Q: 0, R : 0 } => 0,
+				_ => -1
 			};
+
+			return true;
 		}
 
 		// not burst-compatible for now

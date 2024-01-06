@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -23,26 +24,31 @@ namespace Trideria.HexGrid
 			};
 		}
 
-		public int GetNumHexes()
+		public readonly int GetNumHexes()
 		{
 			return Width * Height;
 		}
 
-		public int GetHexIndex(HexCoordinates hex)
+		public readonly bool TryGetHexIndex(HexCoordinates hex, out int idx)
 		{
-			return hex.Q * Height + hex.R + (hex.Q - (hex.Q & 1)) / 2;
+			var col = hex.Q;
+			var row = hex.R + (hex.Q - (hex.Q & 1)) / 2;
+			idx = row * Width + col;
+
+			return col >= 0 && row >= 0 && col < Width && row < Height;
 		}
 
-		private HexCoordinates GetCoordsForIdx(int idx)
+		public readonly HexCoordinates GetCoordsForIdx(int idx)
 		{
 			var col = idx / Height;
 			var row = idx % Height;
+
 			var q = col;
 			var r = row - (col - (col & 1)) / 2;
 			return new HexCoordinates(q, r);
 		}
 
-		public IEnumerable<HexCoordinates> GetHexes()
+		public readonly IEnumerable<HexCoordinates> GetHexes()
 		{
 			var rowStart = HexCoordinates.Zero;
 			for (var i = 0; i < Height; i++)
