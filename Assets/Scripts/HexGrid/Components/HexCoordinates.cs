@@ -1,5 +1,6 @@
 ﻿using System;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace Trideria.HexGrid
 {
@@ -61,6 +62,36 @@ namespace Trideria.HexGrid
 		public static bool operator !=(HexCoordinates left, HexCoordinates right)
 		{
 			return !(left == right);
+		}
+
+		private static HexDirection GetDirection(HexCoordinates src, HexCoordinates dest)
+		{
+			if (src == dest)
+			{
+				throw new ArgumentException("Source and destination hexes are the same.");
+			}
+
+			var absDQ = math.abs(dest.Q - src.Q);
+			var absDR = math.abs(dest.R - src.R);
+			var absDS = math.abs(dest.S - src.S);
+			var maxAbs = math.max(math.max(absDQ, absDR), absDS);
+
+			return maxAbs switch
+			{
+				_ when maxAbs == absDQ => dest.Q > src.Q ? HexDirection.SE : HexDirection.NW,
+				_ when maxAbs == absDR => dest.R > src.R ? HexDirection.S : HexDirection.N,
+				_ => dest.S > src.S ? HexDirection.SW : HexDirection.NE
+			};
+		}
+
+		public HexDirection GetDirection(HexCoordinates destination)
+		{
+			return GetDirection(this, destination);
+		}
+
+		public HexDirection GetDirection()
+		{
+			return GetDirection(Zero, this);
 		}
 	}
 }
