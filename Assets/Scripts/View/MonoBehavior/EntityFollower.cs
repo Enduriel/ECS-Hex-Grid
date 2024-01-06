@@ -62,9 +62,17 @@ namespace Trideria.View
 			transform.rotation = localTransform.Rotation;
 		}
 
+		public virtual void UnRegister()
+		{
+            if (Counters.ContainsKey(typeof(T)) && Counters[typeof(T)] > 0)
+			{
+				Counters[typeof(T)]--;
+			}
+		}
+
 		public void OnDestroy()
 		{
-			Counters[typeof(T)]--;
+			UnRegister();
 		}
 	}
 }
